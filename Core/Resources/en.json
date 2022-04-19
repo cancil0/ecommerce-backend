@@ -1,0 +1,62 @@
+{
+  "General": {
+    "Success": "Success",
+    "Error": "Error"
+  },
+  "HttpStatus": {
+    "Success": "Success",
+    "NotAllowed": "Not Allowed",
+    "BadRequest": "Bad Request",
+    "NotFound": "Not Found",
+    "InternalServerError": "Something went wrong",
+    "Unauthorized": "Unauthorized"
+  },
+  "User": {
+    "NotFound": "User Not Found",
+    "UserExist": "Credentials are taken",
+    "EnterAddress": "Please enter address"
+  },
+  "Api": {
+    "NotFound": "Api Not Found",
+    "RoutePathNotFound": "Api Route Path Not Found"
+  },
+  "Role": {
+    "NotFound": "Rol Not Found"
+  },
+  "ApiRole": {
+    "NotFound": "Api Role Not Found"
+  },
+  "UserRole": {
+    "NotFound": "User Role NotFound"
+  },
+  "Product": {
+    "NotFound": "Product Not Found",
+    "EnterProductId": "Please Enter Product Id"
+  },
+  "Merchant": {
+    "NotFound": "Merchant Not Found"
+  },
+  "Cart": {
+    "ProductHasRemoved": "Product has already removed from cart",
+    "UserCartNotFound": "Customers cart not found. User no: {0}"
+  },
+  "Category": {
+    "EnterCategoryName": "Please Enter a Category Name",
+    "NotFound": "Category Not Found",
+    "AlreadyAdded": "{0} is Already Added",
+    "ParentCategoryNotFound": "Parent Category Not Found"
+  },
+  "Login": {
+    "CheckCredentials": "User not found. Please check your credentials"
+  },
+  "ProductDetail": {
+    "ChooseProductToAdd": "Please choose product to add detail",
+    "ChooseMerchantToAdd": "Please choose merchant to add detail",
+    "CheckCount": "Product count must be greater than 0",
+    "ChooseProductToGetDetails": "Please choose product to get detail"
+  },
+  "LoginRequestValidator": {
+    "NotNull": "Please enter email, username or mobileno",
+    "PasswordNotNull": "Please enter your password"
+  }
+}

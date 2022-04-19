@@ -1,0 +1,59 @@
+﻿using Business.Abstract;
+using Core.Base.Concrete;
+using Entities.Dto.RequestDto.ProductDetailRequestDto;
+using Entities.Dto.ResponseDto.ProductDetailResponseDto;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ecommerce_backend.Controllers.EntityController
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    [AllowAnonymous]
+    public class ProductDetailController : BaseController
+    {
+        private readonly IProductDetailService productDetailService;
+
+        public ProductDetailController()
+        {
+            productDetailService = Resolve<IProductDetailService>();
+        }
+
+        /// <summary>
+        /// Get Product's Detail
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetProductsDetail")]
+        public ActionResult<List<GetProductDetailResponse>> GetProductsDetail([FromBody] GetProductDetailRequest getProductDetail)
+        {
+            return Ok(productDetailService.GetProductsDetail(getProductDetail));
+        }
+
+        /// <summary>
+        /// Add Product Detail
+        /// </summary>
+        /// <param name="addProductDetail"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddProductDetail")]
+        public ActionResult AddProductDetail([FromBody] AddProductDetailRequest addProductDetail)
+        {
+            productDetailService.AddProductDetail(addProductDetail);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Update Product Detail
+        /// </summary>
+        /// <param name="updateProductDetail"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("UpdateProductDetail")]
+        public ActionResult UpdateProductDetail([FromBody] UpdateProductDetailRequest updateProductDetail)
+        {
+            productDetailService.UpdateProductDetail(updateProductDetail);
+            return Ok();
+        }
+    }
+}

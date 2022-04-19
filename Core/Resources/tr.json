@@ -1,0 +1,62 @@
+{
+  "General": {
+    "Success": "Başarılı",
+    "Error": "Hata"
+  },
+  "HttpStatus": {
+    "Success": "Başarılı",
+    "NotAllowed": "Gerekli izinlere sahip değil",
+    "BadRequest": "Eksik istek",
+    "NotFound": "Bulunamadı",
+    "InternalServerError": "Bir sorunla karşılaşıldı",
+    "Unauthorized": "Yetki bulunamadı"
+  },
+  "User": {
+    "NotFound": "Kullanıcı Bulunamadı",
+    "UserExist": "Giriş bilgileri daha önce alınmış",
+    "EnterAddress": "Lütfen adres bilgisi girin"
+  },
+  "Api": {
+    "NotFound": "Api Bulunamadı",
+    "RoutePathNotFound": "Api Dosya Yolu Bulunamadı"
+  },
+  "Role": {
+    "NotFound": "Rol Bulunamadı"
+  },
+  "ApiRole": {
+    "NotFound": "Api Rolü Bulunamadı"
+  },
+  "UserRole": {
+    "NotFound": "Kullanıcı Rolü Bulunamadı"
+  },
+  "Product": {
+    "NotFound": "Ürün Bulunamadı",
+    "EnterProductId": "Lütfen bir ürün numarası giriniz"
+  },
+  "Merchant": {
+    "NotFound": "Satıcı Bulunamadı"
+  },
+  "Cart": {
+    "ProductHasRemoved": "Ürün Zaten Sepetten Kaldırılmış",
+    "UserCartNotFound": "Kullanıcının sepeti bulunamadı. Müşteri No: {0}"
+  },
+  "Category": {
+    "EnterCategoryName": "Lütfen bir kategori ismi giriniz",
+    "NotFound": "Kategori bulunamadı",
+    "AlreadyAdded": "{0} kategorisi zaten eklenmiş",
+    "ParentCategoryNotFound": "Üst kategori bulunamdı"
+  },
+  "Login": {
+    "CheckCredentials": "Kullanıcı bulunamadı. Lütfen giriş bilgilerinizi kontrol edin"
+  },
+  "ProductDetail": {
+    "ChooseProductToAdd": "Lütfen detay eklemek için ürün seçiniz",
+    "ChooseMerchantToAdd": "Lütfen detay eklemek için satıcı seçiniz",
+    "CheckCount": "Ürün sayısı sıfırdan büyük girilmelidir",
+    "ChooseProductToGetDetails": "Lütfen detay getirmek için ürün seçiniz"
+  },
+  "LoginRequestValidator": {
+    "NotNull": "Lütfen email, kullanıcı adı ya da telefon numarası giriniz",
+    "PasswordNotNull": "Lütfen şifrenizi giriniz"
+  }
+}
