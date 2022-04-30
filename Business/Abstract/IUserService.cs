@@ -1,5 +1,6 @@
 ﻿using Entities.Concrete;
 using Entities.Dto.RequestDto.UserRequestDto;
+using Entities.Dto.ResponseDto.UserResponseDto;
 
 namespace Business.Abstract
 {
@@ -8,8 +9,8 @@ namespace Business.Abstract
         string CreateUser(CreateUserRequest createUser);
         void UpdateUser(UserUpdateRequest userUpdate);
         void DeleteUser(GetUserRequest getUser);
-        User GetUserById(Guid id);
-        User GetUser(GetUserRequest getUserRequest);
-        User GetUserAllInfo(GetUserRequest getUserRequest);
+        GetUserResponse GetUserById(Guid id);
+        GetUserResponse GetUser(GetUserRequest getUserRequest);
+        GetUserResponse GetUserAllInfo(GetUserRequest getUserRequest);
     }
 }

@@ -12,6 +12,7 @@ namespace Entities.Dto.RequestDto.UserRequestDto
         public string Password { get; set; }
         public string Gender { get; set; }
         public int BirthDate { get; set; }
+        public CreateUserDefaultRequest UserDefault { get; set; }
         public List<string> Roles { get; set; }
         public List<CreateAddressRequest> Addresses { get; set; }
     }

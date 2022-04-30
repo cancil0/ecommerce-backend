@@ -1,41 +1,41 @@
-﻿using Entities.Dto.RequestDto.AddressRequestDto;
+﻿using Core.Base.Abstract;
+using Core.IoC;
+using Entities.Dto.RequestDto.AddressRequestDto;
 using FluentValidation;
 
 namespace Business.Validation.DtoValidator
 {
     public class CreateAddressRequestValidator : AbstractValidator<CreateAddressRequest>
     {
+        private readonly ILocalizerService localizer;
         public CreateAddressRequestValidator()
         {
+            localizer = Provider.Resolve<ILocalizerService>();
+
             RuleFor(x => x.Country)
-                .NotEmpty()
                 .NotNull()
-                .WithMessage("Country must be filled");
+                .WithMessage("CreateAddressRequestValidator.CountryNotNull");
 
             RuleFor(x => x.Province)
-                .NotEmpty()
                 .NotNull()
-                .WithMessage("Province must be filled");
+                .WithMessage("CreateAddressRequestValidator.ProvinceNotNull");
 
             RuleFor(x => x.District)
-                .NotEmpty()
                 .NotNull()
-                .WithMessage("District must be filled");
+                .WithMessage("CreateAddressRequestValidator.DistrictNotNull");
 
             RuleFor(x => x.AddressInfo)
-                .NotEmpty()
                 .NotNull()
-                .WithMessage("AddressInfo must be filled");
+                .WithMessage("CreateAddressRequestValidator.AddressInfoNotNull");
 
             RuleFor(x => x.AddressType)
-                .NotEmpty()
                 .NotNull()
-                .WithMessage("AddressType must be filled");
+                .WithMessage("CreateAddressRequestValidator.AddressTypeNotNull");
 
             RuleFor(x => x.MobileNo)
                 .Matches("^[0-9]{10}$")
                 .When(x => !string.IsNullOrEmpty(x.MobileNo))
-                .WithMessage("Please enter a proper Mobile No");
+                .WithMessage("CreateAddressRequestValidator.MobileNo");
         }
     }
 }

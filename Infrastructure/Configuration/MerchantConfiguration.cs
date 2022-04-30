@@ -12,7 +12,6 @@ namespace Infrastructure.Configuration
             builder.ToTable("merchant", "entity");
             builder.HasComment("Holds merchants");
             builder.HasKey(x => x.MerchantId);
-            builder.HasAlternateKey(x => x.RegistrationNo);
             #endregion
 
             #region Relations
@@ -43,49 +42,49 @@ namespace Infrastructure.Configuration
 
             builder.Property(s => s.FeedbackCount)
                 .HasColumnType("numeric")
-                .HasColumnOrder(3)
+                .HasColumnOrder(4)
                 .HasColumnName("feedbackcount");
 
             builder.Property(s => s.RegistrationNo)
                 .HasColumnType("numeric")
-                .HasColumnOrder(4)
+                .HasColumnOrder(5)
                 .HasColumnName("registrationno");
 
             builder.Property(s => s.IsDeleted)
                 .HasColumnType("boolean")
-                .HasColumnOrder(5)
+                .HasColumnOrder(6)
                 .HasColumnName("isdeleted");
 
             builder.Property(s => s.CreatedDate)
                 .IsRequired()
                 .HasColumnType("numeric")
-                .HasColumnOrder(6)
+                .HasColumnOrder(7)
                 .HasColumnName("createddate");
 
             builder.Property(s => s.CreatedTime)
                 .IsRequired()
                 .HasColumnType("numeric")
-                .HasColumnOrder(7)
+                .HasColumnOrder(8)
                 .HasColumnName("createdtime");
 
             builder.Property(s => s.CreatedBy)
                 .HasColumnType("varchar")
-                .HasColumnOrder(8)
+                .HasColumnOrder(9)
                 .HasColumnName("createdby");
 
             builder.Property(s => s.UpdatedDate)
                 .HasColumnType("numeric")
-                .HasColumnOrder(9)
+                .HasColumnOrder(10)
                 .HasColumnName("updateddate");
 
             builder.Property(s => s.UpdatedTime)
                 .HasColumnType("numeric")
-                .HasColumnOrder(10)
+                .HasColumnOrder(11)
                 .HasColumnName("updatedtime");
 
             builder.Property(s => s.UpdatedBy)
                 .HasColumnType("varchar")
-                .HasColumnOrder(11)
+                .HasColumnOrder(12)
                 .HasColumnName("updatedby");
             #endregion
         }

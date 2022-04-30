@@ -8,5 +8,7 @@
         public string Color { get; set; }
         public int? Size { get; set; }
         public string MerchantName { get; set; }
+        public long ClickCount { get; set; }
+        public long PurchaseCount { get; set; }
     }
 }

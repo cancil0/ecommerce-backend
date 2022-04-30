@@ -5,6 +5,12 @@ namespace Entities.Concrete
 {
     public class User : BaseEntity
     {
+        public User()
+        {
+            Addresses = new List<Address>();
+            UserRoles = new List<UserRole>();
+            UserDefault = new();
+        }
         public Guid UserId { get; set; }
 
         public string Name { get; set; }
@@ -25,6 +31,7 @@ namespace Entities.Concrete
         public string Gender { get; set; }
 
         public Cart Cart { get; set; }
+        public UserDefault UserDefault { get; set; }
 
         public List<Address> Addresses { get; set; }
 

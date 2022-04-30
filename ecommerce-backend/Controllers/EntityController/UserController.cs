@@ -1,7 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Base.Concrete;
-using Entities.Concrete;
 using Entities.Dto.RequestDto.UserRequestDto;
+using Entities.Dto.ResponseDto.UserResponseDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +25,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpGet]
         [Route("GetById/{id}")]
-        public ActionResult<User> GetUserById([FromRoute] Guid id)
+        public ActionResult<GetUserResponse> GetUserById([FromRoute] Guid id)
         {
             return Ok(userService.GetUserById(id));
         }
@@ -36,7 +36,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("GetUser")]
-        public ActionResult<User> GetUser([FromBody] GetUserRequest getUser)
+        public ActionResult<GetUserResponse> GetUser([FromBody] GetUserRequest getUser)
         {
             return Ok(userService.GetUser(getUser));
         }
@@ -47,7 +47,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("GetUserAllInfo")]
-        public ActionResult GetUserAllInfo([FromBody] GetUserRequest getUser)
+        public ActionResult<GetUserResponse> GetUserAllInfo([FromBody] GetUserRequest getUser)
         {
             return Ok(userService.GetUserAllInfo(getUser));
         }

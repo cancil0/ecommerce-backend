@@ -21,46 +21,39 @@ namespace DataAccess.Repository
             return dbSet.Find(id);
         }
 
+        public async Task<T> GetByIdAsync(Guid id)
+        {
+            return await dbSet.FindAsync(id);
+        }
         public T Get(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
         {
             var query = dbSet.Where(expression);
             return includes.Aggregate(query, (currrent, includeProperty) => currrent.Include(includeProperty)).FirstOrDefault();
         }
-
-        public T GetAsNoTracking(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
-        {
-            var query = dbSet.AsNoTracking().Where(expression);
-            return includes.Aggregate(query, (currrent, includeProperty) => currrent.Include(includeProperty)).FirstOrDefault();
-        }
-
-        public async Task<T> GetByIdAsync(Guid id)
-        {
-            return await dbSet.FindAsync(id);
-        }
-
         public async Task<T> GetAsync(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
         {
             var query = dbSet.Where(expression);
             return await includes.Aggregate(query, (currrent, includeProperty) => currrent.Include(includeProperty)).FirstOrDefaultAsync();
         }
-
+        public T GetAsNoTracking(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
+        {
+            var query = dbSet.AsNoTracking().Where(expression);
+            return includes.Aggregate(query, (currrent, includeProperty) => currrent.Include(includeProperty)).FirstOrDefault();
+        }
         public List<T> GetMany(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
         {
             var query = dbSet.Where(expression);
             return includes.Aggregate(query, (currrent, includeProperty) => currrent.Include(includeProperty)).ToList();
         }
-
         public async Task<List<T>> GetManyAsync(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
         {
             var query = dbSet.Where(expression);
             return await includes.Aggregate(query, (currrent, includeProperty) => currrent.Include(includeProperty)).ToListAsync();
         }
-
         public List<T> GetAll()
         {
             return dbSet.ToList();
         }
-
         public List<T> GetAllWithInclude(params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = dbSet;

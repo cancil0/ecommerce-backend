@@ -27,21 +27,6 @@ namespace Business.Concrete
 
         public void AddProductDetail(AddProductDetailRequest addProductDetail)
         {
-            if (addProductDetail.ProductId == Guid.Empty)
-            {
-                throw new AppException("ProductDetail.ChooseProductToAdd", ExceptionTypes.BadRequest.GetValue());
-            }
-
-            if (addProductDetail.MerchantId == Guid.Empty)
-            {
-                throw new AppException("ProductDetail.ChooseMerchantToAdd", ExceptionTypes.BadRequest.GetValue());
-            }
-
-            if (addProductDetail.Count < 0)
-            {
-                throw new AppException("ProductDetail.CheckCount", ExceptionTypes.BadRequest.GetValue());
-            }
-
             var productDetail = mapper.Map<ProductDetail>(addProductDetail);
 
             productDetail.Product = productDal.GetById(addProductDetail.ProductId);
@@ -75,7 +60,9 @@ namespace Business.Concrete
                     Detail = productDetail.Detail,
                     Price = productDetail.Price,
                     Size = productDetail.Size,
-                    MerchantName = productDetail.Merchant.MerchantName
+                    MerchantName = productDetail.Merchant.MerchantName,
+                    ClickCount = productDetail.ClickCount,
+                    PurchaseCount = productDetail.PurchaseCount
                 });
             }
 
@@ -93,6 +80,20 @@ namespace Business.Concrete
 
             mapper.Map(updateProductDetail, productDetail);
 
+            productDetailDal.Update(productDetail);
+        }
+
+        public void UpdateClickedCount(UpdateProductDetailClickCountRequest updateProductDetail)
+        {
+            var productDetail = productDetailDal.GetById(updateProductDetail.ProductDetailId);
+            productDetail.ClickCount = updateProductDetail.ClickCount;
+            productDetailDal.Update(productDetail);
+        }
+
+        public void UpdatePurchasedCount(UpdateProductDetailPurchaseCountRequest updateProductDetail)
+        {
+            var productDetail = productDetailDal.GetById(updateProductDetail.ProductDetailId);
+            productDetail.PurchaseCount = updateProductDetail.PurchaseCount;
             productDetailDal.Update(productDetail);
         }
     }

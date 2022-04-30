@@ -8,46 +8,58 @@ namespace Business.Validation.EntityValidator
         public UserValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty()
                 .NotNull()
-                .WithMessage("Name must be filled");
+                .WithMessage("CreateUserRequestValidator.NameNotNull");
 
             RuleFor(x => x.Name)
                 .MinimumLength(2)
-                .WithMessage("Please enter 2 or more letter for name");
+                .WithMessage("CreateUserRequestValidator.NameMinLength");
 
             RuleFor(x => x.Name)
-                .MaximumLength(51)
-                .WithMessage("Please enter 50 or less letter for name");
+                .MaximumLength(50)
+                .WithMessage("CreateUserRequestValidator.NameMaxLength");
 
             RuleFor(x => x.SurName)
-                .NotEmpty()
                 .NotNull()
-                .WithMessage("SurName must be filled");
+                .WithMessage("CreateUserRequestValidator.SurNameNotNull");
 
             RuleFor(x => x.SurName)
                 .MinimumLength(2)
-                .WithMessage("Please enter 2 or more letter for surname");
+                .WithMessage("CreateUserRequestValidator.SurNameMinLength");
 
             RuleFor(x => x.SurName)
                 .MaximumLength(50)
-                .WithMessage("Please enter 50 or less letter for surname");
+                .WithMessage("CreateUserRequestValidator.SurNameMaxLength");
 
             RuleFor(x => x.UserName)
-                .NotEmpty()
                 .NotNull()
-                .WithMessage("MobileNo must be filled");
+                .WithMessage("CreateUserRequestValidator.UserNameNotNull");
 
             RuleFor(x => x.Email)
-                .NotEmpty()
                 .NotNull()
                 .EmailAddress()
-                .WithMessage("Email must be filled");
+                .WithMessage("CreateUserRequestValidator.EmailNameNotNull");
+
+            RuleFor(x => x.Password)
+                .NotNull()
+                .WithMessage("CreateUserRequestValidator.PasswordNotNull");
+
+            RuleFor(x => x.Password)
+                .MinimumLength(6)
+                .MaximumLength(50)
+                .WithMessage("CreateUserRequestValidator.PasswordLength");
 
             RuleFor(x => x.MobileNo)
-                .NotEmpty()
                 .NotNull()
-                .WithMessage("MobileNo must be filled");
+                .WithMessage("CreateUserRequestValidator.MobileNoNotNull");
+
+            RuleFor(x => x.MobileNo)
+                .Matches("^[0-9]{10}$")
+                .WithMessage("CreateUserRequestValidator.MobileNo");
+
+            RuleFor(x => x.BirthDate)
+                .GreaterThanOrEqualTo(19000101)
+                .WithMessage("CreateUserRequestValidator.BirthDate");
         }
     }
 }

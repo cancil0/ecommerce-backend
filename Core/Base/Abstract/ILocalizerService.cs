@@ -1,9 +1,4 @@
-﻿using Core.IoC;
-using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
-using System.Globalization;
-
-namespace Core.Base.Abstract
+﻿namespace Core.Base.Abstract
 {
     public interface ILocalizerService
     {

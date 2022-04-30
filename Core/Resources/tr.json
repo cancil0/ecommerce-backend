@@ -58,5 +58,28 @@
   "LoginRequestValidator": {
     "NotNull": "Lütfen email, kullanıcı adı ya da telefon numarası giriniz",
     "PasswordNotNull": "Lütfen şifrenizi giriniz"
+  },
+  "CreateAddressRequestValidator": {
+    "CountryNotNull": "Ülke doldurulmak zorundadır",
+    "ProvinceNotNull": "Şehir doldurulmak zorundadır",
+    "DistrictNotNull": "Bölge doldurulmak zorundadır",
+    "AddressInfoNotNull": "Adres bilgisi doldurulmak zorundadır",
+    "AddressTypeNotNull": "Adres tipi doldurulmak zorundadır",
+    "MobileNo": "Lütfen doğru bir telefon numarası girin"
+  },
+  "CreateUserRequestValidator": {
+    "NameNotNull": "İsim doldurulmak zorundadır",
+    "NameMinLength": "İsim en az 2 harften oluşmalıdır",
+    "NameMaxLength": "İsim en fazla 50 harften oluşmalıdır",
+    "SurNameNotNull": "Soyisim doldurulmak zorundadır",
+    "SurNameMinLength": "Soyisim en az 2 harften oluşmalıdır",
+    "SurNameMaxLength": "Soyisim en fazla 50 harften oluşmalıdır",
+    "UserNameNotNull": "Kullanıcı Adı doldurulmak zorundadır",
+    "EmailNameNotNull": "E-posta doldurulmak zorundadır",
+    "PasswordNotNull": "Şifre doldurulmak zorundadır",
+    "PasswordLength": "Şifre oluşturma aralığı 6-50 arasında olabilir",
+    "MobileNoNotNull": "Telefon numarası doldurulmak zorundadır",
+    "MobileNo": "Lütfen doğru bir telefon numarası girin",
+    "BirthDate": "Doğum tarihi 19000101 den büyük olmalıdır"
   }
 }

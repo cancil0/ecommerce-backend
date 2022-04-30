@@ -8,10 +8,14 @@ using Entities.Dto.RequestDto.ProductDetailRequestDto;
 using Entities.Dto.RequestDto.ProductRequestDto;
 using Entities.Dto.RequestDto.RoleRequestDto;
 using Entities.Dto.RequestDto.UserRequestDto;
+using Entities.Dto.ResponseDto.AddressResponseDto;
+using Entities.Dto.ResponseDto.CartResponseDto;
 using Entities.Dto.ResponseDto.CategoryResponseDto;
 using Entities.Dto.ResponseDto.MerchantResponseDto;
 using Entities.Dto.ResponseDto.ProductDetailResponseDto;
 using Entities.Dto.ResponseDto.ProductResponseDto;
+using Entities.Dto.ResponseDto.UserResponseDto;
+using Entities.Dto.ResponseDto.UserRoleResponseDto;
 
 namespace Business.Mapping
 {
@@ -19,12 +23,17 @@ namespace Business.Mapping
     {
         public MappingProfile()
         {
-            //CustomerMappings
+            //UserMappings
             CreateMap<CreateUserRequest, User>();
             CreateMap<UpdateUserRequest, User>();
+            CreateMap<User, GetUserResponse>().ForMember(x => x.UserRoles, opt => opt.Ignore());
+            CreateMap<GetUserDefaultRequest, UserDefault>();
+            CreateMap<UserDefault, GetUserDefaultResponse>();
+            CreateMap<CreateUserDefaultRequest, UserDefault>();
 
             //AddressMappings
             CreateMap<CreateAddressRequest, Address>();
+            CreateMap<Address, GetUserAddressResponse>();
 
             //RoleMappings
             CreateMap<CreateRoleRequest, Role>();
@@ -51,6 +60,9 @@ namespace Business.Mapping
             CreateMap<AddMerchantRequest, Merchant>();
             CreateMap<UpdateMerchantRequest, Merchant>();
             CreateMap<Merchant, GetMerchantResponse>();
+
+            //CartMappings
+            CreateMap<Cart, GetUserCartResponse>();
         }
     }
 }

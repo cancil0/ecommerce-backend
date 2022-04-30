@@ -19,6 +19,10 @@ namespace Infrastructure.Configuration
             builder.HasOne(x => x.Cart)
                 .WithOne(x => x.User)
                 .HasForeignKey<Cart>(x => x.UserId);
+
+            builder.HasOne(x => x.UserDefault)
+                .WithOne(x => x.User)
+                .HasForeignKey<UserDefault>(x => x.UserId);
             #endregion
 
             #region Properties

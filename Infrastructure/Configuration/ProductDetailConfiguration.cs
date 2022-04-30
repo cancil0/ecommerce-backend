@@ -63,6 +63,18 @@ namespace Infrastructure.Configuration
                 .HasColumnOrder(6)
                 .HasColumnName("size");
 
+            builder.Property(s => s.ClickCount)
+                .HasColumnType("numeric")
+                .HasMaxLength(250)
+                .HasColumnOrder(7)
+                .HasColumnName("clickcount");
+
+            builder.Property(s => s.PurchaseCount)
+                .HasColumnType("numeric")
+                .HasMaxLength(250)
+                .HasColumnOrder(8)
+                .HasColumnName("purchasecount");
+
 
             #endregion
         }

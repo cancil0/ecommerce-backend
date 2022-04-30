@@ -58,5 +58,13 @@
   "LoginRequestValidator": {
     "NotNull": "Please enter email, username or mobileno",
     "PasswordNotNull": "Please enter your password"
+  },
+  "CreateAddressRequestValidator": {
+    "CountryNotNull": "Country must be filled",
+    "ProvinceNotNull": "Province must be filled",
+    "DistrictNotNull": "District must be filled",
+    "AddressInfoNotNull": "AddressInfo must be filled",
+    "AddressTypeNotNull": "AddressType must be filled",
+    "MobileNo": "Please enter a proper Mobile No"
   }
 }

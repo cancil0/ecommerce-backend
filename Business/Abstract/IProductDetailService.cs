@@ -8,5 +8,7 @@ namespace Business.Abstract
         List<GetProductDetailResponse> GetProductsDetail(GetProductDetailRequest getProductDetail);
         void AddProductDetail(AddProductDetailRequest addProductDetail);
         void UpdateProductDetail(UpdateProductDetailRequest updateProductDetail);
+        void UpdateClickedCount(UpdateProductDetailClickCountRequest updateProductDetail);
+        void UpdatePurchasedCount(UpdateProductDetailPurchaseCountRequest updateProductDetail);
     }
 }
