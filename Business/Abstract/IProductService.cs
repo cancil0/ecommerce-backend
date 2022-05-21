@@ -9,5 +9,6 @@ namespace Business.Abstract
         void UpdateProduct(UpdateProductRequest updateProduct);
         void DeleteProduct(DeleteProductRequest deleteProduct);
         GetProductResponse GetProduct(Guid ProductId);
+        List<GetProductResponse> GetCategoryProducts(Guid categoryId);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Base.Concrete;
 using Entities.Dto.RequestDto.MerchantRequestDto;
-using Entities.Dto.ResponseDto.MerchantResponseDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce_backend.Controllers.EntityController
@@ -23,8 +23,9 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="merchantId"></param>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         [Route("GetMerchant")]
-        public ActionResult<GetMerchantResponse> GetMerchant([FromQuery] Guid merchantId)
+        public ActionResult GetMerchant([FromQuery] Guid merchantId)
         {
             return Ok(merchantService.GetMerchant(merchantId));
         }

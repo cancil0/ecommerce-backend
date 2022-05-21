@@ -3,6 +3,11 @@
     "Success": "Başarılı",
     "Error": "Hata"
   },
+  "Jwt": {
+    "TokenNotFound": "Token bulunamadı",
+    "ExpiredToken": "Süresi geçmiş Token",
+    "InvalidToken": "Geçersiz Token"
+  },
   "HttpStatus": {
     "Success": "Başarılı",
     "NotAllowed": "Gerekli izinlere sahip değil",
@@ -14,7 +19,9 @@
   "User": {
     "NotFound": "Kullanıcı Bulunamadı",
     "UserExist": "Giriş bilgileri daha önce alınmış",
-    "EnterAddress": "Lütfen adres bilgisi girin"
+    "EnterAddress": "Lütfen adres bilgisi girin",
+    "RoleNotFound": "Kullanıcı rolü bulunamadı",
+    "Unauthorized":  "Kullanıcı yetkisi bulunamadı"
   },
   "Api": {
     "NotFound": "Api Bulunamadı",
@@ -75,7 +82,7 @@
     "SurNameMinLength": "Soyisim en az 2 harften oluşmalıdır",
     "SurNameMaxLength": "Soyisim en fazla 50 harften oluşmalıdır",
     "UserNameNotNull": "Kullanıcı Adı doldurulmak zorundadır",
-    "EmailNameNotNull": "E-posta doldurulmak zorundadır",
+    "EmailNotNull": "E-posta doldurulmak zorundadır",
     "PasswordNotNull": "Şifre doldurulmak zorundadır",
     "PasswordLength": "Şifre oluşturma aralığı 6-50 arasında olabilir",
     "MobileNoNotNull": "Telefon numarası doldurulmak zorundadır",

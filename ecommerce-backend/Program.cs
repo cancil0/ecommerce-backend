@@ -29,6 +29,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
 var containerBuilder = new ContainerBuilder();
+AutofacRegistration.Populate(containerBuilder, builder.Services);
 containerBuilder.RegisterModule(new AutofacBusinessModule());
 Provider.Container = containerBuilder.Build();
 
@@ -49,6 +50,11 @@ app.UseHttpsRedirection();
 app.UseRequestLocalization();
 app.UseStaticFiles();
 
+app.UseCors(builder => builder
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowAnyOrigin());
+
 app.Use((context, next) =>
 {
     context.Request.EnableBuffering();
@@ -67,10 +73,6 @@ app.UseJwtHandler();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors(builder => builder
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowAnyOrigin());
 
 app.MapControllers();
 

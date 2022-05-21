@@ -30,12 +30,12 @@ namespace Core.Middleware.AuthenticationMiddleware
 
         public async Task Invoke(HttpContext context)
         {
-            /*var contextEndPoint = context.GetEndpoint().Metadata.Select(x => x.GetType()).FirstOrDefault(x => x.Name == "AllowAnonymousAttribute");
+            var notCheckToken = context.GetEndpoint().Metadata.Select(x => x.GetType()).Any(x => x.Name == "AllowAnonymousAttribute");
 
-            if (contextEndPoint == null)
+            if (!notCheckToken)
             {
                 CheckToken(context);
-            }*/
+            }
             await next(context);
         }
 
@@ -46,7 +46,7 @@ namespace Core.Middleware.AuthenticationMiddleware
                 var token = context.Request.Headers["Authorization"].FirstOrDefault();
                 if (string.IsNullOrEmpty(token))
                 {
-                    throw new AppException("Please enter a token", ExceptionTypes.NotFound.GetValue());
+                    throw new AppException("Jwt.TokenNotFound", ExceptionTypes.NotFound.GetValue());
                 }
                 token = token.Split(" ").Last();
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -74,7 +74,7 @@ namespace Core.Middleware.AuthenticationMiddleware
 
                 if(user.Roles.Count == 0)
                 {
-                    throw new AppException("User's role not found", ExceptionTypes.NotFound.GetValue());
+                    throw new AppException("User.RoleNotFound", ExceptionTypes.NotFound.GetValue());
                 }
 
                 var controllerName = context.Request.RouteValues.First(x => x.Key == "controller").Value;
@@ -87,17 +87,17 @@ namespace Core.Middleware.AuthenticationMiddleware
 
                 if (!isAuthorized)
                 {
-                    throw new AppException("Unauthorized user", ExceptionTypes.UnAuthorized.GetValue());
+                    throw new AppException("User.Unauthorized", ExceptionTypes.UnAuthorized.GetValue());
                 }
 
             }
             catch (SecurityTokenExpiredException)
             {
-                throw new AppException("Token is expired", ExceptionTypes.UnAuthorized.GetValue());
+                throw new AppException("Jwt.ExpiredToken", ExceptionTypes.UnAuthorized.GetValue());
             }
             catch (SecurityTokenException)
             {
-                throw new AppException("Invalid token", ExceptionTypes.UnAuthorized.GetValue());
+                throw new AppException("Jwt.InvalidToken", ExceptionTypes.UnAuthorized.GetValue());
             }
             catch (AppException e)
             {

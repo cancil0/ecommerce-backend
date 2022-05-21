@@ -1,7 +1,6 @@
 ﻿using Business.Abstract;
 using Core.Base.Concrete;
 using Entities.Dto.RequestDto.ApiRoleRequestDto;
-using Entities.Dto.ResponseDto.ApiRoleResponse;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce_backend.Controllers.SystemController
@@ -22,7 +21,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// <returns></returns>
         [HttpPost]
         [Route("GetApiRoles")]
-        public ActionResult<List<GetApiRoleResponse>> GetApiRoles()
+        public ActionResult GetApiRoles()
         {
             return Ok(apiRoleService.GetApiRoles());
         }

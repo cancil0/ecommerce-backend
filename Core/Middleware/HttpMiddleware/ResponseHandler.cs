@@ -88,10 +88,13 @@ namespace Core.Middleware.HttpMiddleware
             });
 
             string userName = null;
-            var contextEndPoint = context.GetEndpoint().Metadata.Select(x => x.GetType()).FirstOrDefault(x => x.Name == "AllowAnonymousAttribute");
-            if (contextEndPoint == null && context.Items.TryGetValue("userName", out var user))
+            if (context.GetEndpoint() != null)
             {
-                userName = user.ToString();
+                var contextEndPoint = context.GetEndpoint().Metadata.Select(x => x.GetType()).FirstOrDefault(x => x.Name == "AllowAnonymousAttribute");
+                if (contextEndPoint == null && context.Items.TryGetValue("userName", out var user))
+                {
+                    userName = user.ToString();
+                }
             }
 
             LogToTable();

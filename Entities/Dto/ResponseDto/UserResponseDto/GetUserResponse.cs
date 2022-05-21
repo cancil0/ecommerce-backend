@@ -1,6 +1,7 @@
 ﻿using Entities.Dto.ResponseDto.AddressResponseDto;
 using Entities.Dto.ResponseDto.CartResponseDto;
 using Entities.Dto.ResponseDto.UserRoleResponseDto;
+using Entities.EntityAttributes;
 
 namespace Entities.Dto.ResponseDto.UserResponseDto
 {
@@ -14,6 +15,7 @@ namespace Entities.Dto.ResponseDto.UserResponseDto
 
         public string UserName { get; set; }
 
+        [NotLoggableProperty]
         public string Password { get; set; }
 
         public int BirthDate { get; set; }

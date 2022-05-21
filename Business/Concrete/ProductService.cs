@@ -80,6 +80,25 @@ namespace Business.Concrete
             return mapper.Map<GetProductResponse>(product);
         }
 
+        public List<GetProductResponse> GetCategoryProducts(Guid categoryId)
+        {
+            if (categoryId == Guid.Empty)
+            {
+                throw new AppException("Product.EnterProductId", ExceptionTypes.BadRequest.GetValue());
+            }
+
+            var products = productDal.GetMany(x => x.Category.CategoryId == categoryId, x => x.ProductDetails, x => x.Medias, x => x.Category);
+
+            var response = new List<GetProductResponse>();
+
+            foreach (var product in products)
+            {
+                response.Add(mapper.Map<GetProductResponse>(product));
+            }
+
+            return response;
+        }
+
         public void UpdateProduct(UpdateProductRequest updateProduct)
         {
             var product = productDal.GetById(updateProduct.ProductId);

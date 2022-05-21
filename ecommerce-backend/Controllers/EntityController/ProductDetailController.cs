@@ -1,7 +1,6 @@
 ﻿using Business.Abstract;
 using Core.Base.Concrete;
 using Entities.Dto.RequestDto.ProductDetailRequestDto;
-using Entities.Dto.ResponseDto.ProductDetailResponseDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,8 +23,9 @@ namespace ecommerce_backend.Controllers.EntityController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         [Route("GetProductsDetail")]
-        public ActionResult<List<GetProductDetailResponse>> GetProductsDetail([FromBody] GetProductDetailRequest getProductDetail)
+        public ActionResult GetProductsDetail([FromBody] GetProductDetailRequest getProductDetail)
         {
             return Ok(productDetailService.GetProductsDetail(getProductDetail));
         }

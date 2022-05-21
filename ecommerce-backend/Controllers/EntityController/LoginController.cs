@@ -26,7 +26,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("Login")]
-        public ActionResult<string> Login([FromBody] LoginRequest loginRequest)
+        public ActionResult Login([FromBody] LoginRequest loginRequest)
         {
             return Ok(loginService.Login(loginRequest, configuration));
         }

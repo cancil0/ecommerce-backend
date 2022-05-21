@@ -2,9 +2,11 @@
 using Core.Middleware.ExceptionMiddleware;
 using Core.Middleware.HttpMiddleware;
 using Core.Middleware.LocalizationMiddleware;
+using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;

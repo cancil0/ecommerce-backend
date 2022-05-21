@@ -1,7 +1,6 @@
 ﻿using Business.Abstract;
 using Core.Base.Concrete;
 using Entities.Dto.RequestDto.RoleRequestDto;
-using Entities.Dto.ResponseDto.RoleResponseDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce_backend.Controllers.SystemController
@@ -22,7 +21,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// <returns></returns>
         [HttpPost]
         [Route("GetRoles")]
-        public ActionResult<List<GetRoleResponse>> GetRoles()
+        public ActionResult GetRoles()
         {
             return Ok(roleService.GetRoles());
         }

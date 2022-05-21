@@ -2,7 +2,6 @@
 using Core.Base.Concrete;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Entities.Dto.RequestDto.UserRoleRequestDto;
-using Entities.Dto.ResponseDto.UserRoleResponseDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce_backend.Controllers.SystemController
@@ -23,7 +22,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// <returns></returns>
         [HttpPost]
         [Route("GetUserRoles")]
-        public ActionResult<List<UserRoleResponse>> GetUserRoles([FromBody] GetUserRequest getUser)
+        public ActionResult GetUserRoles([FromBody] GetUserRequest getUser)
         {
             return Ok(userRoleService.GetUserRoles(getUser));
         }

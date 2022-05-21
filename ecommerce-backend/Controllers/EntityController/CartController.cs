@@ -1,13 +1,14 @@
 ﻿using Business.Abstract;
 using Core.Base.Concrete;
 using Entities.Dto.RequestDto.CartRequestDto;
-using Entities.Dto.ResponseDto.CartResponseDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce_backend.Controllers.EntityController
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class CartController : BaseController
     {
         private readonly ICartService cartService;
@@ -23,7 +24,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpGet]
         [Route("GetUserCart")]
-        public ActionResult<GetUserCartResponse> GetUserCart([FromQuery] Guid userId)
+        public ActionResult GetUserCart([FromQuery] Guid userId)
         {
             return Ok(cartService.GetUserCart(userId));
         }

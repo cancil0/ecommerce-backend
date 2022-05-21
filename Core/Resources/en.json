@@ -3,6 +3,11 @@
     "Success": "Success",
     "Error": "Error"
   },
+  "Jwt": {
+    "TokenNotFound": "Token Not Found",
+    "ExpiredToken": "Expired Token",
+    "InvalidToken": "Invalid Token"
+  },
   "HttpStatus": {
     "Success": "Success",
     "NotAllowed": "Not Allowed",
@@ -14,7 +19,9 @@
   "User": {
     "NotFound": "User Not Found",
     "UserExist": "Credentials are taken",
-    "EnterAddress": "Please enter address"
+    "EnterAddress": "Please enter address",
+    "RoleNotFound": "Users role not found",
+    "Unauthorized": "Unauthorized User"
   },
   "Api": {
     "NotFound": "Api Not Found",
@@ -66,5 +73,20 @@
     "AddressInfoNotNull": "AddressInfo must be filled",
     "AddressTypeNotNull": "AddressType must be filled",
     "MobileNo": "Please enter a proper Mobile No"
+  },
+  "CreateUserRequestValidator": {
+    "NameNotNull": "Name must be filled",
+    "NameMinLength": "Minimum Name length can be two",
+    "NameMaxLength": "Maximum Name length can be fifty",
+    "SurNameNotNull": "SurName can not be null",
+    "SurNameMinLength": "Minimum Surname length can be two",
+    "SurNameMaxLength": "Maximum Surname length can be fifty",
+    "UserNameNotNull": "UserName must be filled",
+    "EmailNotNull": "Email must be filled",
+    "PasswordNotNull": "Password must be filled",
+    "PasswordLength": "Password length can be between 6-50",
+    "MobileNoNotNull": "Mobile No must be filled",
+    "MobileNo": "Please enter a valid mobile no",
+    "BirthDate": "Birth date must be greater then 19000101"
   }
 }

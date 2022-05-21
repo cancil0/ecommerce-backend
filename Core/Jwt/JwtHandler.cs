@@ -21,6 +21,7 @@ namespace Core.Jwt
                                 new Claim("id", user.UserId.ToString()),
                                 new Claim("email", user.Email),
                                 new Claim("userName", user.UserName),
+                                new Claim("name", string.Format("{0} {1}", user.Name, user.SurName))
                             };
 
             foreach (var userRole in user.UserRoles)
@@ -29,15 +30,11 @@ namespace Core.Jwt
             }
 
             var expires = configuration["JwtSettings:AccessTokenExpiration"].ToInt();
-            var issuer = configuration["JwtSettings:Issuer"];
-            var audience = configuration["JwtSettings:Audience"];
 
             var tokenOptions = new JwtSecurityToken(
                 claims: claims,
                 signingCredentials: signingCredentials,
-                expires: DateTime.Now.AddMinutes(expires),
-                issuer: issuer,
-                audience: audience);
+                expires: DateTime.Now.AddMinutes(expires));
 
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
@@ -52,8 +49,6 @@ namespace Core.Jwt
                 new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
                     ValidateLifetime = true,
                     IssuerSigningKey = mySecurityKey,
                 }, out SecurityToken validatedToken);

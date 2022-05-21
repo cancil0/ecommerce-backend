@@ -1,7 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Base.Concrete;
 using Entities.Dto.RequestDto.ApiRequestDto;
-using Entities.Dto.ResponseDto.ApiResponseDto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce_backend.Controllers.SystemController
@@ -22,7 +22,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// <returns></returns>
         [HttpPost]
         [Route("GetApis")]
-        public ActionResult<List<GetApiResponse>> GetApis()
+        public ActionResult GetApis()
         {
             return Ok(apiService.GetApis());
         }

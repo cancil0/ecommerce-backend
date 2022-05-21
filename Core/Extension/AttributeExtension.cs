@@ -1,4 +1,6 @@
-﻿namespace Core.Extension
+﻿using Entities.EntityAttributes;
+
+namespace Core.Extension
 {
     public static class AttributeExtension
     {
@@ -17,17 +19,15 @@
             return attributes;
         }
 
-        public static Attribute[] GetAttributesOfProperty(this Type elementType, string propertyName)
+        public static Attribute[] GetAttributesOfProperty(this Type elementType)
         {
+            var properties = elementType.GetProperties();
             Attribute[] attributes = Array.Empty<Attribute>();
-            var propertyInfo = elementType.GetProperty(propertyName);
 
-            if (propertyInfo == null)
+            foreach (var property in properties)
             {
-                return attributes;
+                attributes = Attribute.GetCustomAttributes(property, true);
             }
-
-            attributes = Attribute.GetCustomAttributes(propertyInfo, true);
 
             return attributes;
         }

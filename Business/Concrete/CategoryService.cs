@@ -23,6 +23,24 @@ namespace Business.Concrete
             categoryDal = Resolve<ICategoryDal>();
         }
 
+        public GetCategoryResponse GetCategory(Guid categoryId)
+        {
+            if (cache.TryGetValue(CacheTypes.CategoryResponse.GetValue(), out List<GetCategoryResponse> categoryResponse))
+            {
+                return categoryResponse.FirstOrDefault(x => x.CategoryId == categoryId);
+            }
+            var category = categoryDal.GetById(categoryId);
+            categoryResponse = new List<GetCategoryResponse>();
+            categoryResponse.Add(new GetCategoryResponse()
+            {
+                CategoryId = category.CategoryId,
+                Name = category.Name,
+                ParentCategoryId = category.ParentCategoryId
+            });
+
+            return categoryResponse.FirstOrDefault();
+        }
+
         public List<GetCategoryResponse> GetCategories()
         {
             if(cache.TryGetValue(CacheTypes.CategoryResponse.GetValue(), out List<GetCategoryResponse> categoryResponse))
@@ -134,5 +152,6 @@ namespace Business.Concrete
                 }
             }
         }
+
     }
 }
