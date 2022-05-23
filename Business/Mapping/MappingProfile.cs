@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Entities.Concrete;
 using Entities.Dto.RequestDto.AddressRequestDto;
+using Entities.Dto.RequestDto.CarouselRequestDto;
 using Entities.Dto.RequestDto.CategoryRequestDto;
 using Entities.Dto.RequestDto.MediaRequestDto;
 using Entities.Dto.RequestDto.MerchantRequestDto;
@@ -63,6 +64,9 @@ namespace Business.Mapping
 
             //CartMappings
             CreateMap<Cart, GetUserCartResponse>();
+
+            //CarouselMappings
+            CreateMap<AddCarouselRequest, Carousel>();
         }
     }
 }

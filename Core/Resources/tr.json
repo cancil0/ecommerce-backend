@@ -21,7 +21,7 @@
     "UserExist": "Giriş bilgileri daha önce alınmış",
     "EnterAddress": "Lütfen adres bilgisi girin",
     "RoleNotFound": "Kullanıcı rolü bulunamadı",
-    "Unauthorized":  "Kullanıcı yetkisi bulunamadı"
+    "Unauthorized": "Kullanıcı yetkisi bulunamadı"
   },
   "Api": {
     "NotFound": "Api Bulunamadı",
@@ -52,6 +52,9 @@
     "NotFound": "Kategori bulunamadı",
     "AlreadyAdded": "{0} kategorisi zaten eklenmiş",
     "ParentCategoryNotFound": "Üst kategori bulunamdı"
+  },
+  "Carousel": {
+    "NotFound": "Carousel bulunamadı"
   },
   "Login": {
     "CheckCredentials": "Kullanıcı bulunamadı. Lütfen giriş bilgilerinizi kontrol edin"

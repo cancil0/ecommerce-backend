@@ -53,6 +53,9 @@
     "AlreadyAdded": "{0} is Already Added",
     "ParentCategoryNotFound": "Parent Category Not Found"
   },
+  "Carousel": {
+    "NotFound": "Carousel Not Found"
+  },
   "Login": {
     "CheckCredentials": "User not found. Please check your credentials"
   },
