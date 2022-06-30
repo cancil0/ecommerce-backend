@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Dto.RequestDto.CategoryRequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,12 +7,12 @@ namespace ecommerce_backend.Controllers.EntityController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : BaseController
+    public class CategoryController : ControllerBase
     {
         private readonly ICategoryService categoryService;
-        public CategoryController()
+        public CategoryController(ICategoryService categoryService)
         {
-            categoryService = Resolve<ICategoryService>();
+            this.categoryService = categoryService;
         }
 
         /// <summary>

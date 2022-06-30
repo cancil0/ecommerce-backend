@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Dto.RequestDto.CartRequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +8,12 @@ namespace ecommerce_backend.Controllers.EntityController
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class CartController : BaseController
+    public class CartController : ControllerBase
     {
         private readonly ICartService cartService;
-        public CartController()
+        public CartController(ICartService cartService)
         {
-            cartService = Resolve<ICartService>();
+            this.cartService = cartService;
         }
 
         /// <summary>

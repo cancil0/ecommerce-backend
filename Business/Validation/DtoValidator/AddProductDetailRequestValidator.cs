@@ -1,4 +1,4 @@
-﻿using Core.Base.Abstract;
+﻿using Core.Abstract;
 using Core.IoC;
 using Entities.Dto.RequestDto.ProductDetailRequestDto;
 using FluentValidation;
@@ -14,15 +14,15 @@ namespace Business.Validation.DtoValidator
 
             RuleFor(x => x.ProductId)
                 .Must(x => x != Guid.Empty)
-                .WithMessage(localizer.GetTranslatedValue("ProductDetail.ChooseProductToAdd"));
+                .WithMessage(localizer.GetResource("ProductDetail.ChooseProductToAdd"));
 
             RuleFor(x => x.MerchantId)
                 .Must(x => x != Guid.Empty)
-                .WithMessage(localizer.GetTranslatedValue("ProductDetail.ChooseMerchantToAdd"));
+                .WithMessage(localizer.GetResource("ProductDetail.ChooseMerchantToAdd"));
 
             RuleFor(x => x)
                 .Must(x => x.Count > 0)
-                .WithMessage(localizer.GetTranslatedValue("ProductDetail.CheckCount"));
+                .WithMessage(localizer.GetResource("ProductDetail.CheckCount"));
         }
     }
 }

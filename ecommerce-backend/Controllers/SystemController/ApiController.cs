@@ -1,19 +1,18 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Dto.RequestDto.ApiRequestDto;
-using Microsoft.AspNetCore.Authorization;
+using Entities.Dto.ResponseDto.ApiResponseDto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ecommerce_backend.Controllers.SystemController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApiController : BaseController
+    public class ApiController : ControllerBase
     {
         private readonly IApiService apiService;
-        public ApiController()
+        public ApiController(IApiService apiService)
         {
-            apiService = Resolve<IApiService>();
+            this.apiService = apiService;
         }
 
         /// <summary>
@@ -22,7 +21,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// <returns></returns>
         [HttpPost]
         [Route("GetApis")]
-        public ActionResult GetApis()
+        public ActionResult<List<GetApiResponse>> GetApis()
         {
             return Ok(apiService.GetApis());
         }

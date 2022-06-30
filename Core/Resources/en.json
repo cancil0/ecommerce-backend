@@ -91,5 +91,14 @@
     "MobileNoNotNull": "Mobile No must be filled",
     "MobileNo": "Please enter a valid mobile no",
     "BirthDate": "Birth date must be greater then 19000101"
+  },
+  "Logging": {
+    "ServiceStarted": "Service is started: {0}",
+    "ServiceFinished": "Service is finished: {0}",
+    "HttpServiceFinished": "{0} ms elapsed."
+  },
+  "Localization": {
+    "KeyCanNotBeNull": "Key can not be null.",
+    "KeyNotFound": "Key not found: {0}"
   }
 }

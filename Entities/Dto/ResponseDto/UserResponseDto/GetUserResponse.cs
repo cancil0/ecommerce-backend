@@ -7,6 +7,10 @@ namespace Entities.Dto.ResponseDto.UserResponseDto
 {
     public class GetUserResponse
     {
+        public GetUserResponse()
+        {
+            UserRoles = new();
+        }
         public Guid UserId { get; set; }
 
         public string Name { get; set; }

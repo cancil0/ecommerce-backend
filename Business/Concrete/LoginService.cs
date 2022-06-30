@@ -1,8 +1,8 @@
 ﻿using Business.Abstract;
+using Core.Abstract;
 using Core.Attributes;
-using Core.Base.Concrete;
-using Core.Jwt;
-using Core.Middleware.ExceptionMiddleware;
+using Core.Concrete;
+using Core.ExceptionHandler;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto.RequestDto.LoginRequestDto;
@@ -15,12 +15,12 @@ namespace Business.Concrete
     public class LoginService : BaseService<User>, ILoginService
     {
         private readonly IUserDal userDal;
-        private readonly ITokenHelper tokenHelper;
+        private readonly ITokenService tokenService;
 
         public LoginService()
         {
             userDal = Resolve<IUserDal>();
-            tokenHelper = new JwtHandler();
+            tokenService = Resolve<ITokenService>();
         }
 
         [Loggable(IsRequestLoggable = false)]
@@ -32,7 +32,7 @@ namespace Business.Concrete
         }
 
         [Loggable(IsRequestLoggable = false, IsResponseLoggable = false)]
-        public string Login(LoginRequest loginRequest, IConfiguration configuration)
+        public async Task<string> Login(LoginRequest loginRequest)
         {
             var user = userDal.Get(new GetUserRequest()
             {
@@ -44,8 +44,7 @@ namespace Business.Concrete
             if (user.Password != loginRequest.Password)
                 throw new AppException("Login.CheckCredentials", ExceptionTypes.NotAllowed.GetValue());
 
-            var token = tokenHelper.GenerateToken(user, configuration);
-            return token;
+            return await tokenService.GenerateToken(user);
         }
 
         private static string GeneratePassword(int length = 12)

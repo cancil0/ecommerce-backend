@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Dto.RequestDto.MerchantRequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,13 +7,13 @@ namespace ecommerce_backend.Controllers.EntityController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MerchantController : BaseController
+    public class MerchantController : ControllerBase
     {
         private readonly IMerchantService merchantService;
 
-        public MerchantController()
+        public MerchantController(IMerchantService merchantService)
         {
-            merchantService = Resolve<IMerchantService>();
+            this.merchantService = merchantService;
         }
 
         /// <summary>

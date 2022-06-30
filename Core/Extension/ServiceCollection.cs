@@ -1,63 +1,16 @@
-﻿using Core.Middleware.AuthenticationMiddleware;
-using Core.Middleware.ExceptionMiddleware;
-using Core.Middleware.HttpMiddleware;
-using Core.Middleware.LocalizationMiddleware;
+﻿using Core.IoC;
 using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Globalization;
 using System.Text;
 
 namespace Core.Extension
 {
-    public static class MiddlewareExtension
+    public static class ServiceCollection
     {
-        public static IApplicationBuilder UseErrorHandler(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<ErrorHandler>();
-        }
-
-        public static IApplicationBuilder UseResponseHandler(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<ResponseHandler>();
-        }
-
-        public static IApplicationBuilder UseLocalizationHandler(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<LocalizationHandler>();
-        }
-
-        public static IApplicationBuilder UseJwtHandler(this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<JwtMiddleware>();
-        }
-
-        public static void SetCulture(this IServiceCollection services)
-        {
-            CultureInfo[] supportedCultures = new[]
-            {
-                new CultureInfo("tr-TR"),
-                new CultureInfo("en-US")
-            };
-
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture("tr-TR");
-                options.SupportedCultures = supportedCultures;
-                options.SupportedUICultures = supportedCultures;
-                options.RequestCultureProviders = new List<IRequestCultureProvider>
-                                                {
-                                                    new AcceptLanguageHeaderRequestCultureProvider()
-                                                };
-            });
-        }
-
         public static IServiceCollection JwtSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(opt =>
@@ -117,5 +70,20 @@ namespace Core.Extension
             return services;
         }
 
+        public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            ContextConfiguration.ConnectionString = configuration.GetConnectionString("Connection");
+            NLog.LogManager.Configuration.Variables["ConnectionString"] = ContextConfiguration.ConnectionString;
+
+            services.AddDbContext<Context>();
+
+            return services;
+        }
+
+        public static IServiceCollection GetConfiguration(this IServiceCollection services, IConfiguration configuration)
+        {
+            Provider.Configuration = configuration;
+            return services;
+        }
     }
 }

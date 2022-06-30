@@ -1,4 +1,4 @@
-﻿using Core.Base.Abstract;
+﻿using Core.Abstract;
 using Core.IoC;
 using Entities.Dto.RequestDto.AddressRequestDto;
 using FluentValidation;

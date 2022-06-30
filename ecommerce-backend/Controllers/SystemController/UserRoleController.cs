@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Entities.Dto.RequestDto.UserRoleRequestDto;
 using Microsoft.AspNetCore.Mvc;
@@ -8,12 +7,12 @@ namespace ecommerce_backend.Controllers.SystemController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserRoleController : BaseController
+    public class UserRoleController : ControllerBase
     {
         private readonly IUserRoleService userRoleService;
-        public UserRoleController()
+        public UserRoleController(IUserRoleService userRoleService)
         {
-            userRoleService = Resolve<IUserRoleService>();
+            this.userRoleService = userRoleService;
         }
 
         /// <summary>

@@ -1,12 +1,11 @@
 ﻿using Entities.Dto.RequestDto.LoginRequestDto;
 using Entities.Dto.RequestDto.UserRequestDto;
-using Microsoft.Extensions.Configuration;
 
 namespace Business.Abstract
 {
     public interface ILoginService
     {
-        string Login(LoginRequest loginRequest, IConfiguration configuration);
+        Task<string> Login(LoginRequest loginRequest);
         void ForgotMyPassword(GetUserRequest getUserRequest);
     }
 }

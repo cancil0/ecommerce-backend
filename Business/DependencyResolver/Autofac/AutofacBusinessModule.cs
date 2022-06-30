@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using Business.Mapping;
-using Core.Base.Abstract;
-using Core.Base.Concrete;
+using Core.Abstract;
+using Core.Concrete;
 using Core.IoC;
-using Core.Middleware.LocalizationMiddleware;
+using Core.Middleware;
 using DataAccess.Repository;
 using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Http;
@@ -20,24 +20,44 @@ namespace Business.DependencyResolver.Autofac
         }
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(x => new Context())
-                .InstancePerLifetimeScope();
-
             builder.Register(x => new MemoryCache(new MemoryCacheOptions()))
                 .As<IMemoryCache>()
-                .InstancePerLifetimeScope()
-                .OnRelease(x => x.Dispose());
+                .SingleInstance();
+
+            builder.Register(x => new Context())
+                .AsSelf()
+                .InstancePerLifetimeScope();
 
             builder.Register(x => new HttpContextAccessor())
                 .As<IHttpContextAccessor>()
-                .InstancePerDependency();
+                .InstancePerLifetimeScope();
 
-            builder.Register(x => new LocalizationHandler())
-                .SingleInstance();
-
-            builder.Register(x => new LocalizerService())
+            builder.Register(x => new LocalizerService(x.Resolve<IMemoryCache>()))
                 .As<ILocalizerService>()
                 .SingleInstance();
+
+            builder.Register(x => new Localization(x.Resolve<ILocalizerService>()))
+                .InstancePerLifetimeScope();
+
+            builder.Register(x => new AutofacScope())
+                .InstancePerLifetimeScope();
+
+            builder.Register(x => new Authentication())
+                .InstancePerLifetimeScope();
+
+            builder.Register(x => new HttpLogging())
+                .InstancePerLifetimeScope();
+
+            builder.Register(x => new Response())
+                .InstancePerLifetimeScope();
+
+            builder.Register(x => new LoggerService())
+                .As<ILoggerService>()
+                .InstancePerLifetimeScope();
+
+            builder.Register(x => new TokenService())
+                .As<ITokenService>()
+                .InstancePerLifetimeScope();
 
             builder.RegisterInstance(AutoMapperConfig.Initialize())
                 .SingleInstance();
@@ -45,13 +65,14 @@ namespace Business.DependencyResolver.Autofac
             builder.RegisterAssemblyTypes(Provider.ServiceAssembly)
                     .AsClosedTypesOf(typeof(IBaseService<>))
                     .AsImplementedInterfaces()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(Provider.GenericDalAssembly)
                     .AsClosedTypesOf(typeof(IGenericDal<>))
                     .AsImplementedInterfaces()
-                    .InstancePerDependency();
+                    .InstancePerLifetimeScope();
 
+            base.Load(builder);
         }
     }
 }

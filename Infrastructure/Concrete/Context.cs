@@ -8,7 +8,7 @@ namespace Infrastructure.Concrete
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseNpgsql("User ID=postgres;Password=123456;Server=localhost;Port=5432;Database=ECommerce;Integrated Security=true;Pooling=true;")
+                .UseNpgsql(ContextConfiguration.ConnectionString)
                 .EnableSensitiveDataLogging();
         }
 
@@ -17,5 +17,10 @@ namespace Infrastructure.Concrete
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 
+    }
+
+    public static class ContextConfiguration
+    {
+        public static string ConnectionString { get; set; }
     }
 }

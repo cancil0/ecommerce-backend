@@ -1,6 +1,6 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
-using Core.Middleware.ExceptionMiddleware;
+using Core.Concrete;
+using Core.ExceptionHandler;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto.RequestDto.ApiRequestDto;

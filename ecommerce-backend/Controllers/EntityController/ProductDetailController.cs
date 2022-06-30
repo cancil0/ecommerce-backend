@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Dto.RequestDto.ProductDetailRequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +8,13 @@ namespace ecommerce_backend.Controllers.EntityController
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class ProductDetailController : BaseController
+    public class ProductDetailController : ControllerBase
     {
         private readonly IProductDetailService productDetailService;
 
-        public ProductDetailController()
+        public ProductDetailController(IProductDetailService productDetailService)
         {
-            productDetailService = Resolve<IProductDetailService>();
+            this.productDetailService = productDetailService;
         }
 
         /// <summary>

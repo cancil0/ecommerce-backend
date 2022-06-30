@@ -1,18 +1,20 @@
-﻿using Core.Extension;
+﻿using Core.Abstract;
+using Core.Extension;
+using Core.IoC;
 using Entities.Concrete;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Core.Jwt
+namespace Core.Concrete
 {
-    public class JwtHandler : ITokenHelper
+    public class TokenService : ITokenService
     {
-        public string GenerateToken(User user, IConfiguration configuration)
+        public async Task<string> GenerateToken(User user, CancellationToken cancellationToken = default)
         {
-            var key = Encoding.UTF8.GetBytes(configuration["JwtSettings:Secret"]);
+            cancellationToken.ThrowIfCancellationRequested();
+            var key = Encoding.UTF8.GetBytes(Provider.Configuration["JwtSettings:Secret"]);
             var secret = new SymmetricSecurityKey(key);
             SigningCredentials signingCredentials = new(secret, SecurityAlgorithms.HmacSha256);
 
@@ -29,17 +31,20 @@ namespace Core.Jwt
                 claims.Add(new Claim("roles", userRole.Role.RoleName));
             }
 
-            var expires = configuration["JwtSettings:AccessTokenExpiration"].ToInt();
+            var expires = Provider.Configuration["JwtSettings:AccessTokenExpiration"].ToInt();
 
             var tokenOptions = new JwtSecurityToken(
                 claims: claims,
                 signingCredentials: signingCredentials,
                 expires: DateTime.Now.AddMinutes(expires));
 
-            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            return await Task.FromResult(new JwtSecurityTokenHandler().WriteToken(tokenOptions));
         }
-        public bool IsTokenValid(string key, string token)
+
+        public async Task<bool> IsTokenValid(string token, CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+            var key = Provider.Configuration["JwtSettings:Secret"];
             var mySecret = Encoding.UTF8.GetBytes(key);
             var mySecurityKey = new SymmetricSecurityKey(mySecret);
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -55,9 +60,9 @@ namespace Core.Jwt
             }
             catch
             {
-                return false;
+                return await Task.FromResult(false);
             }
-            return true;
+            return await Task.FromResult(true);
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Business.Abstract;
-using Core.Base.Concrete;
-using Core.Middleware.ExceptionMiddleware;
+using Core.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto.RequestDto.MerchantRequestDto;
 using Entities.Dto.ResponseDto.MerchantResponseDto;
-using Entities.Enums;
 
 namespace Business.Concrete
 {

@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Concrete;
 using Entities.Dto.RequestDto.CarouselRequestDto;
 using Microsoft.AspNetCore.Authorization;
@@ -9,12 +8,12 @@ namespace ecommerce_backend.Controllers.EntityController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarouselController : BaseController
+    public class CarouselController : ControllerBase
     {
         private readonly ICarouselService carouselService;
-        public CarouselController()
+        public CarouselController(ICarouselService carouselService)
         {
-            carouselService = Resolve<ICarouselService>();
+            this.carouselService = carouselService;
         }
 
         /// <summary>

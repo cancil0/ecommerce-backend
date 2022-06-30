@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +8,12 @@ namespace ecommerce_backend.Controllers.EntityController
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class UserController : BaseController
+    public class UserController : ControllerBase
     {
         private readonly IUserService userService;
-        public UserController()
+        public UserController(IUserService userService)
         {
-            userService = Resolve<IUserService>();
+            this.userService = userService;
         }
 
         /// <summary>

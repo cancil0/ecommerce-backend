@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Dto.RequestDto.ApiRoleRequestDto;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,12 +6,12 @@ namespace ecommerce_backend.Controllers.SystemController
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApiRoleController : BaseController
+    public class ApiRoleController : ControllerBase
     {
         private readonly IApiRoleService apiRoleService;
-        public ApiRoleController()
+        public ApiRoleController(IApiRoleService apiRoleService)
         {
-            apiRoleService = Resolve<IApiRoleService>();
+            this.apiRoleService = apiRoleService;
         }
 
         /// <summary>

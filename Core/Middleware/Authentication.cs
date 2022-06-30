@@ -1,6 +1,5 @@
-﻿using Autofac;
+﻿using Core.ExceptionHandler;
 using Core.IoC;
-using Core.Middleware.ExceptionMiddleware;
 using Entities.Concrete;
 using Entities.Dto.ResponseDto.ApiRoleResponse;
 using Entities.Enums;
@@ -8,27 +7,22 @@ using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
-namespace Core.Middleware.AuthenticationMiddleware
+namespace Core.Middleware
 {
-    public class JwtMiddleware
+    public class Authentication : IMiddleware
     {
-        private readonly RequestDelegate next;
-        private readonly IConfiguration configuration;
         private readonly IMemoryCache cache;
 
-        public JwtMiddleware(RequestDelegate next, IConfiguration configuration)
+        public Authentication()
         {
-            this.next = next;
-            this.configuration = configuration;
             cache = Provider.Resolve<IMemoryCache>();
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             var notCheckToken = context.GetEndpoint().Metadata.Select(x => x.GetType()).Any(x => x.Name == "AllowAnonymousAttribute");
 
@@ -36,6 +30,7 @@ namespace Core.Middleware.AuthenticationMiddleware
             {
                 CheckToken(context);
             }
+
             await next(context);
         }
 
@@ -49,8 +44,9 @@ namespace Core.Middleware.AuthenticationMiddleware
                     throw new AppException("Jwt.TokenNotFound", ExceptionTypes.NotFound.GetValue());
                 }
                 token = token.Split(" ").Last();
+                context.Request.Headers.Authorization = string.Format("Bearer {0}", token);
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(configuration["JwtSettings:Secret"]);
+                var key = Encoding.ASCII.GetBytes(Provider.Configuration["JwtSettings:Secret"]);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -59,10 +55,10 @@ namespace Core.Middleware.AuthenticationMiddleware
                     ValidateAudience = false,
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
-                    
+
                 var jwtToken = (JwtSecurityToken)validatedToken;
 
-                UserInfoToken user = new() 
+                UserInfoToken user = new()
                 {
                     Email = jwtToken.Claims.First(x => x.Type == "email").Value,
                     UserName = jwtToken.Claims.First(x => x.Type == "userName").Value,
@@ -72,7 +68,7 @@ namespace Core.Middleware.AuthenticationMiddleware
 
                 context.Items.Add("userName", user.UserName);
 
-                if(user.Roles.Count == 0)
+                if (user.Roles.Count == 0)
                 {
                     throw new AppException("User.RoleNotFound", ExceptionTypes.NotFound.GetValue());
                 }

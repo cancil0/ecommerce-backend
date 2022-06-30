@@ -1,4 +1,4 @@
-﻿using Core.Middleware.ExceptionMiddleware;
+﻿using Core.ExceptionHandler;
 using DataAccess.Abstract;
 using DataAccess.Repository;
 using Entities.Concrete;

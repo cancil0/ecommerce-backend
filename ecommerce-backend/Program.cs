@@ -1,79 +1,54 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolver.Autofac;
+using Business.Mapping;
 using Business.Validation.EntityValidator;
 using Core.Extension;
-using Core.IoC;
 using FluentValidation.AspNetCore;
+using NLog;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+LogManager.LoadConfiguration(string.Format("{0}{1}", Directory.GetCurrentDirectory(), "/nlog.config"));
+builder.Services.AddMemoryCache(x => x.ExpirationScanFrequency = TimeSpan.FromMinutes(30));
 
 // Add services to the container.
 builder.Services.AddMemoryCache(x => x.ExpirationScanFrequency = TimeSpan.FromMinutes(30));
 builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<UserValidator>()) //Fluent Validation
-    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);//Fixes Json loop issue
+    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddFluentValidation(x => 
+{
+    x.RegisterValidatorsFromAssemblyContaining<UserValidator>();
+    x.ValidatorOptions.CascadeMode = FluentValidation.CascadeMode.Stop;
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.IntegrateSwagger();
 builder.Services.JwtSettings(builder.Configuration);
-
-//Localization Middleware yapýlýyor
-//builder.Services.SetCulture();
-
-//AutoMapper
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-//Autofac
+builder.Services.AddDbContext(builder.Configuration);
+builder.Services.GetConfiguration(builder.Configuration);
+builder.Services.InjectServices();
+builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
-var containerBuilder = new ContainerBuilder();
-AutofacRegistration.Populate(containerBuilder, builder.Services);
-containerBuilder.RegisterModule(new AutofacBusinessModule());
-Provider.Container = containerBuilder.Build();
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
-app.UseSwaggerUI(options =>
-{
-    options.DefaultModelsExpandDepth(-1);
-    options.DefaultModelExpandDepth(-1);
-    options.DefaultModelRendering(Swashbuckle.AspNetCore.SwaggerUI.ModelRendering.Example);
-});
-
+app.ConfigSwagger();
 app.UseHttpsRedirection();
-
 app.UseRequestLocalization();
 app.UseStaticFiles();
 
-app.UseCors(builder => builder
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowAnyOrigin());
-
-app.Use((context, next) =>
-{
-    context.Request.EnableBuffering();
-    return next();
-});
-
 app.UseRouting();
-//Custom Middleware
-
-app.UseLocalizationHandler();
-
-app.UseResponseHandler();
-app.UseErrorHandler();
-app.UseJwtHandler();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-
+app.AddCustomMiddlewares();
 app.MapControllers();
 
 app.Run();

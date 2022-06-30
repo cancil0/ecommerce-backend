@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Base.Concrete;
 using Entities.Dto.RequestDto.LoginRequestDto;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Microsoft.AspNetCore.Authorization;
@@ -10,14 +9,12 @@ namespace ecommerce_backend.Controllers.EntityController
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class LoginController : BaseController
+    public class LoginController : ControllerBase
     {
         private readonly ILoginService loginService;
-        private readonly IConfiguration configuration;
-        public LoginController(IConfiguration configuration)
+        public LoginController(ILoginService loginService)
         {
-            loginService = Resolve<ILoginService>();
-            this.configuration = configuration;
+            this.loginService = loginService;
         }
         
         /// <summary>
@@ -26,9 +23,9 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("Login")]
-        public ActionResult Login([FromBody] LoginRequest loginRequest)
+        public async Task<ActionResult<string>> Login([FromBody] LoginRequest loginRequest)
         {
-            return Ok(loginService.Login(loginRequest, configuration));
+            return Ok(await loginService.Login(loginRequest));
         }
 
         /// <summary>
