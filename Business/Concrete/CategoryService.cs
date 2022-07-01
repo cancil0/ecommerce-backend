@@ -13,14 +13,16 @@ namespace Business.Concrete
 {
     public class CategoryService : BaseService<Category>, ICategoryService
     {
+        private readonly ICategoryDal categoryDal;
         private readonly IMapper mapper;
         private readonly IMemoryCache cache;
-        private readonly ICategoryDal categoryDal;
-        public CategoryService()
+        public CategoryService(ICategoryDal categoryDal, 
+                               IMapper mapper, 
+                               IMemoryCache cache)
         {
-            mapper = Resolve<IMapper>();
-            cache = Resolve<IMemoryCache>();
-            categoryDal = Resolve<ICategoryDal>();
+            this.categoryDal = categoryDal;
+            this.mapper = mapper;
+            this.cache = cache;
         }
 
         public GetCategoryResponse GetCategory(Guid categoryId)

@@ -24,13 +24,16 @@ namespace Core.Concrete
         }
         public string GetResource(string key, params string[] args)
         {
-            var isThrowException = Provider.Configuration["Exceptions:ThrowException:NotFoundResourceKey"].ToBoolean();
+            var isThrowException = Provider.Configuration.GetBoolValue("Exceptions:ThrowException:NotFoundResourceKey");
 
             if (string.IsNullOrEmpty(key))
             {
-                return isThrowException
-                    ? throw new AppException("Localization.KeyCanNotBeNull")
-                    : key;
+                if (isThrowException)
+                {
+                    throw new AppException("Localization.KeyCanNotBeNull");
+                }
+
+                key = "Localization.KeyIsNull";
             }
 
             List<string> keys = new();
@@ -41,7 +44,7 @@ namespace Core.Concrete
             {
                 return isThrowException
                     ? throw new AppException("Localization.KeyNotFound", HttpStatusCode.NotFound.ToString(), key)
-                    : key;
+                    : string.Format(key, args);
             }
 
             var secondLevelOfResource = JsonConvert.DeserializeObject<Dictionary<string, string>>(firstLevelOfResource.ToString());
@@ -50,7 +53,7 @@ namespace Core.Concrete
             {
                 return isThrowException
                     ? throw new AppException("Localization.KeyNotFound", HttpStatusCode.NotFound.ToString(), key)
-                    : key;
+                    : string.Format(key, args);
             }
 
             return string.Format(resource, args);

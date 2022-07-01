@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Dto.RequestDto.ProductRequestDto;
+using Entities.Dto.ResponseDto.ProductResponseDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +11,6 @@ namespace ecommerce_backend.Controllers.EntityController
     public class ProductController : ControllerBase
     {
         private readonly IProductService productService;
-
         public ProductController(IProductService productService)
         {
             this.productService = productService;
@@ -24,7 +24,7 @@ namespace ecommerce_backend.Controllers.EntityController
         [HttpGet]
         [AllowAnonymous]
         [Route("GetProduct")]
-        public ActionResult GetProduct([FromQuery] Guid productId)
+        public ActionResult<GetProductResponse> GetProduct([FromQuery] Guid productId)
         {
             return Ok(productService.GetProduct(productId));
         }
@@ -37,7 +37,7 @@ namespace ecommerce_backend.Controllers.EntityController
         [HttpGet]
         [AllowAnonymous]
         [Route("GetCategoryProducts")]
-        public ActionResult GetCategoryProducts([FromQuery] Guid categoryId)
+        public ActionResult<List<GetProductResponse>> GetCategoryProducts([FromQuery] Guid categoryId)
         {
             return Ok(productService.GetCategoryProducts(categoryId));
         }

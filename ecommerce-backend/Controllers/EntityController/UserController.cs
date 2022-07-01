@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Dto.RequestDto.UserRequestDto;
+using Entities.Dto.ResponseDto.UserResponseDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +8,6 @@ namespace ecommerce_backend.Controllers.EntityController
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;
@@ -23,7 +23,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpGet]
         [Route("GetById/{id}")]
-        public ActionResult GetUserById([FromRoute] Guid id)
+        public ActionResult<GetUserResponse> GetUserById([FromRoute] Guid id)
         {
             return Ok(userService.GetUserById(id));
         }
@@ -34,7 +34,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("GetUser")]
-        public ActionResult GetUser([FromBody] GetUserRequest getUser)
+        public ActionResult<GetUserResponse> GetUser([FromBody] GetUserRequest getUser)
         {
             return Ok(userService.GetUser(getUser));
         }
@@ -45,7 +45,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("GetUserAllInfo")]
-        public ActionResult GetUserAllInfo([FromBody] GetUserRequest getUser)
+        public ActionResult<GetUserResponse> GetUserAllInfo([FromBody] GetUserRequest getUser)
         {
             return Ok(userService.GetUserAllInfo(getUser));
         }
@@ -58,7 +58,7 @@ namespace ecommerce_backend.Controllers.EntityController
         [HttpPost]
         [Route("CreateUser")]
         [AllowAnonymous]
-        public ActionResult CreateUser([FromBody] CreateUserRequest userRequest)
+        public ActionResult<string> CreateUser([FromBody] CreateUserRequest userRequest)
         {
             return Ok(userService.CreateUser(userRequest));
         }

@@ -13,10 +13,11 @@ namespace Business.Concrete
     {
         private readonly ICarouselDal carouselDal;
         private readonly IMapper mapper;
-        public CarouselService()
+        public CarouselService(ICarouselDal carouselDal, 
+                               IMapper mapper)
         {
-            carouselDal = Resolve<ICarouselDal>();
-            mapper = Resolve<IMapper>();
+            this.carouselDal = carouselDal;
+            this.mapper = mapper;
         }
 
         public Carousel GetCarousel(Guid carouselId)

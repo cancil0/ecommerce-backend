@@ -1,5 +1,4 @@
 ﻿using Core.Abstract;
-using Core.IoC;
 using Entities.Dto.RequestDto.LoginRequestDto;
 using FluentValidation;
 
@@ -7,10 +6,8 @@ namespace Business.Validation.DtoValidator
 {
     public class LoginRequestValidator : AbstractValidator<LoginRequest>
     {
-        private readonly ILocalizerService localizer;
-        public LoginRequestValidator()
+        public LoginRequestValidator(ILocalizerService localizer)
         {
-            localizer = Provider.Resolve<ILocalizerService>();
 
             RuleFor(x => x.Password)
                 .NotNull()

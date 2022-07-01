@@ -17,9 +17,9 @@ namespace Core.Middleware
     {
         private readonly IMemoryCache cache;
 
-        public Authentication()
+        public Authentication(IMemoryCache cache)
         {
-            cache = Provider.Resolve<IMemoryCache>();
+            this.cache = cache;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)

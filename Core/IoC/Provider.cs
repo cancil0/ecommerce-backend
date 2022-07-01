@@ -10,11 +10,6 @@ namespace Core.IoC
         public static IConfiguration Configuration { get; set; }
         public static IContainer Container { get; set; }
         public static AutofacServiceProvider ServiceProvider { get; set; }
-
         public static T Resolve<T>() => (T)ServiceProvider.GetService(typeof(T));
-
-        public static Assembly ServiceAssembly { get; set; }
-
-        public static Assembly GenericDalAssembly { get; set; }
     }
 }

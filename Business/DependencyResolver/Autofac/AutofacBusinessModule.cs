@@ -13,30 +13,24 @@ namespace Business.DependencyResolver.Autofac
 {
     public class AutofacBusinessModule : Module
     {
-        public AutofacBusinessModule()
-        {
-            Provider.ServiceAssembly = System.Reflection.Assembly.GetExecutingAssembly();
-            Provider.GenericDalAssembly = System.Reflection.Assembly.GetAssembly(typeof(IGenericDal<>));
-        }
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(x => new MemoryCache(new MemoryCacheOptions()))
+            /*builder.Register(x => new MemoryCache(new MemoryCacheOptions()))
                 .As<IMemoryCache>()
-                .SingleInstance();
+                .SingleInstance();*/
 
-            builder.Register(x => new Context())
+            /*builder.Register(x => new Context())
                 .AsSelf()
-                .InstancePerLifetimeScope();
+                .InstancePerLifetimeScope();*/
 
-            builder.Register(x => new HttpContextAccessor())
+            /*builder.Register(x => new HttpContextAccessor())
                 .As<IHttpContextAccessor>()
-                .InstancePerLifetimeScope();
+                .InstancePerLifetimeScope();*/
 
-            builder.Register(x => new LocalizerService(x.Resolve<IMemoryCache>()))
-                .As<ILocalizerService>()
-                .SingleInstance();
+            /*builder.RegisterInstance(AutoMapperConfig.Initialize())
+                .SingleInstance();*/
 
-            builder.Register(x => new Localization(x.Resolve<ILocalizerService>()))
+            /*builder.Register(x => new Localization(x.Resolve<ILocalizerService>()))
                 .InstancePerLifetimeScope();
 
             builder.Register(x => new AutofacScope())
@@ -49,20 +43,21 @@ namespace Business.DependencyResolver.Autofac
                 .InstancePerLifetimeScope();
 
             builder.Register(x => new Response())
-                .InstancePerLifetimeScope();
+                .InstancePerLifetimeScope();*/
 
-            builder.Register(x => new LoggerService())
+            /*builder.Register(x => new LoggerService())
                 .As<ILoggerService>()
                 .InstancePerLifetimeScope();
 
-            builder.Register(x => new TokenService())
-                .As<ITokenService>()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterInstance(AutoMapperConfig.Initialize())
+            builder.Register(x => new LocalizerService(x.Resolve<IMemoryCache>()))
+                .As<ILocalizerService>()
                 .SingleInstance();
 
-            builder.RegisterAssemblyTypes(Provider.ServiceAssembly)
+            builder.Register(x => new TokenService())
+                .As<ITokenService>()
+                .InstancePerLifetimeScope();*/
+
+            /*builder.RegisterAssemblyTypes(Provider.ServiceAssembly)
                     .AsClosedTypesOf(typeof(IBaseService<>))
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
@@ -70,7 +65,7 @@ namespace Business.DependencyResolver.Autofac
             builder.RegisterAssemblyTypes(Provider.GenericDalAssembly)
                     .AsClosedTypesOf(typeof(IGenericDal<>))
                     .AsImplementedInterfaces()
-                    .InstancePerLifetimeScope();
+                    .InstancePerLifetimeScope();*/
 
             base.Load(builder);
         }

@@ -17,22 +17,22 @@ namespace Business.Concrete
         private readonly IProductDal productDal;
         private readonly IMerchantDal merchantDal;
         private readonly IMapper mapper;
-        public ProductDetailService()
+        public ProductDetailService(IProductDetailDal productDetailDal, 
+                                    IProductDal productDal, 
+                                    IMerchantDal merchantDal, 
+                                    IMapper mapper)
         {
-            productDetailDal = Resolve<IProductDetailDal>();
-            productDal = Resolve<IProductDal>();
-            merchantDal = Resolve<IMerchantDal>();
-            mapper = Resolve<IMapper>();
+            this.productDetailDal = productDetailDal;
+            this.productDal = productDal;
+            this.merchantDal = merchantDal;
+            this.mapper = mapper;
         }
 
         public void AddProductDetail(AddProductDetailRequest addProductDetail)
         {
             var productDetail = mapper.Map<ProductDetail>(addProductDetail);
-
             productDetail.Product = productDal.GetById(addProductDetail.ProductId);
-
             productDetail.Merchant = merchantDal.GetById(addProductDetail.MerchantId);
-
             productDetailDal.Insert(productDetail);
         }
 

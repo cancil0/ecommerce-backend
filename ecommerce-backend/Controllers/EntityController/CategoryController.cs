@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Entities.Dto.RequestDto.CategoryRequestDto;
+using Entities.Dto.ResponseDto.CategoryResponseDto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ namespace ecommerce_backend.Controllers.EntityController
         [HttpGet]
         [AllowAnonymous]
         [Route("GetCategory")]
-        public ActionResult GetCategory([FromQuery] Guid categoryId)
+        public ActionResult<GetCategoryResponse> GetCategory([FromQuery] Guid categoryId)
         {
             return Ok(categoryService.GetCategory(categoryId));
         }
@@ -34,7 +35,7 @@ namespace ecommerce_backend.Controllers.EntityController
         [HttpGet]
         [AllowAnonymous]
         [Route("GetCategories")]
-        public ActionResult GetCategories()
+        public ActionResult<List<GetCategoryResponse>> GetCategories()
         {
             return Ok(categoryService.GetCategories());
         }
@@ -46,7 +47,7 @@ namespace ecommerce_backend.Controllers.EntityController
         [HttpGet]
         [AllowAnonymous]
         [Route("GetSubCategories")]
-        public ActionResult GetSubCategories([FromQuery] Guid categoryId)
+        public ActionResult<List<GetCategoryResponse>> GetSubCategories([FromQuery] Guid categoryId)
         {
             return Ok(categoryService.GetSubCategories(categoryId));
         }

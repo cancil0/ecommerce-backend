@@ -23,9 +23,10 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginRequest loginRequest)
+        public async Task<ActionResult<string>> Login([FromBody] LoginRequest loginRequest, CancellationToken cancellationToken = default)
         {
-            return Ok(await loginService.Login(loginRequest));
+            cancellationToken.ThrowIfCancellationRequested();
+            return Ok(await loginService.Login(loginRequest, cancellationToken));
         }
 
         /// <summary>

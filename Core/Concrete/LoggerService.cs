@@ -3,7 +3,6 @@ using Core.IoC;
 using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Http;
 using NLog;
-using NLog.Common;
 using NLog.Targets;
 
 namespace Core.Concrete
@@ -19,14 +18,14 @@ namespace Core.Concrete
         private readonly ILocalizerService localizerService;
         private readonly ILogger logger;
 
-        public LoggerService()
+        public LoggerService(ILocalizerService localizerService)
         {
-            localizerService = Provider.Resolve<ILocalizerService>();
+            this.localizerService = localizerService;
             logger = LogManager.GetCurrentClassLogger();
         }
 
-        public void LogToDatabase(string key, params string[] args) => logger.Info(localizerService.GetResource(key, args));
-        public void LogToFile(string key, params string[] args) => logger.Debug(localizerService.GetResource(key, args));
+        public void LogInfo(string key, params string[] args) => logger.Info(localizerService.GetResource(key, args));
+        public void LogDebug(string key, params string[] args) => logger.Debug(localizerService.GetResource(key, args));
         public void LogWarn(string key, params string[] args) => logger.Warn(localizerService.GetResource(key, args));
         public void LogError(string key, params string[] args) => logger.Error(localizerService.GetResource(key, args));
         public void LogException(Exception exception, string message) => logger.Error(exception, message);

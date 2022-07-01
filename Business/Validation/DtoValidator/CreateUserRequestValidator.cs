@@ -1,11 +1,12 @@
-﻿using Entities.Dto.RequestDto.UserRequestDto;
+﻿using Core.Abstract;
+using Entities.Dto.RequestDto.UserRequestDto;
 using FluentValidation;
 
 namespace Business.Validation.DtoValidator
 {
     public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
     {
-        public CreateUserRequestValidator()
+        public CreateUserRequestValidator(ILocalizerService localizer)
         {
             RuleFor(x => x.Name)
                 .NotNull()

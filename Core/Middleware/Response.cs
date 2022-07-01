@@ -21,6 +21,7 @@ namespace Core.Middleware
             string wrappedResponse = Wrap(responseString, context);
             byte[] responseBytes = Encoding.UTF8.GetBytes(wrappedResponse);
             context.Response.Body = responseBody;
+            context.Response.ContentLength = responseBytes.Length;
             await context.Response.Body.WriteAsync(responseBytes);
         }
 
@@ -71,10 +72,7 @@ namespace Core.Middleware
                 Data = response
             };
 
-            var wrapperResponse = wrapper.ToString();
-            context.Response.ContentLength = wrapperResponse.Length;
-
-            return wrapperResponse;
+            return wrapper.ToString();
         }
     }
 }

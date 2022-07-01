@@ -5,18 +5,11 @@ namespace Infrastructure.Concrete
 {
     public class Context : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder
-                .UseNpgsql(ContextConfiguration.ConnectionString)
-                .EnableSensitiveDataLogging();
-        }
-
+        public Context(DbContextOptions<Context> options) : base(options) {}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
-
     }
 
     public static class ContextConfiguration

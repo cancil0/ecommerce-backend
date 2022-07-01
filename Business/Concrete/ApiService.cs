@@ -12,9 +12,9 @@ namespace Business.Concrete
     public class ApiService : BaseService<Api>, IApiService
     {
         private readonly IApiDal apiDal;
-        public ApiService()
+        public ApiService(IApiDal apiDal)
         {
-            apiDal = Resolve<IApiDal>();
+            this.apiDal = apiDal;
         }
         public void AddApi(string apiRoutePath)
         {

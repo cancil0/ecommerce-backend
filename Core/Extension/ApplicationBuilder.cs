@@ -36,7 +36,7 @@ namespace Core.Extension
             app.UseMiddleware<Localization>();
             app.UseMiddleware<Response>();
             app.ConfigureException();
-            //app.UseMiddleware<Authentication>();
+            app.UseMiddleware<Authentication>();
 
             return app;
         }

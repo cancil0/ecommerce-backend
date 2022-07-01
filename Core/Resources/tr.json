@@ -99,6 +99,7 @@
   },
   "Localization": {
     "KeyCanNotBeNull": "Key boş olamaz.",
-    "KeyNotFound": "Key bulunamadı: {0}"
+    "KeyNotFound": "Key bulunamadı: {0}",
+    "KeyIsNull": "Çevrilecek Key bulunamadı."
   }
 }

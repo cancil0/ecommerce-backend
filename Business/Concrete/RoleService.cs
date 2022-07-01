@@ -12,9 +12,9 @@ namespace Business.Concrete
     public class RoleService : BaseService<Role>, IRoleService
     {
         private readonly IRoleDal roleDal;
-        public RoleService()
+        public RoleService(IRoleDal roleDal)
         {
-            roleDal = Resolve<IRoleDal>();
+            this.roleDal = roleDal;
         }
         public void AddRole(string roleName)
         {

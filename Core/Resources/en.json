@@ -99,6 +99,7 @@
   },
   "Localization": {
     "KeyCanNotBeNull": "Key can not be null.",
-    "KeyNotFound": "Key not found: {0}"
+    "KeyNotFound": "Key not found: {0}",
+    "KeyIsNull": "Key which will be translated is null."
   }
 }

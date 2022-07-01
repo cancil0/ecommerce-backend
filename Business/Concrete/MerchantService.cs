@@ -13,10 +13,11 @@ namespace Business.Concrete
         private readonly IMerchantDal merchantDal;
         private readonly IMapper mapper;
 
-        public MerchantService()
+        public MerchantService(IMerchantDal merchantDal, 
+                               IMapper mapper)
         {
-            merchantDal = Resolve<IMerchantDal>();
-            mapper = Resolve<IMapper>();
+            this.merchantDal = merchantDal;
+            this.mapper = mapper;
         }
 
         public void AddMerchant(AddMerchantRequest addMerchant)
@@ -29,14 +30,12 @@ namespace Business.Concrete
         public void DeleteMerchant(Guid merchantId)
         {
             var merchant = merchantDal.GetMerchantById(merchantId);
-
             merchantDal.Delete(merchant);
         }
 
         public GetMerchantResponse GetMerchant(Guid merchantId)
         {
             var merchant = merchantDal.GetMerchantById(merchantId);
-
             return mapper.Map<GetMerchantResponse>(merchant);
         }
 

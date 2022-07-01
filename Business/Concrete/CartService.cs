@@ -16,11 +16,13 @@ namespace Business.Concrete
         private readonly ICartDal cartDal;
         private readonly ICartProductDal cartProductDal;
         private readonly IProductDal productDal;
-        public CartService()
+        public CartService(ICartDal cartDal, 
+                           ICartProductDal cartProductDal, 
+                           IProductDal productDal)
         {
-            cartDal = Resolve<ICartDal>();
-            cartProductDal = Resolve<ICartProductDal>();
-            productDal = Resolve<IProductDal>();
+            this.cartDal = cartDal;
+            this.cartProductDal = cartProductDal;
+            this.productDal = productDal;
         }
 
         public void AddProductToCart(AddProductToCartRequest addProduct)

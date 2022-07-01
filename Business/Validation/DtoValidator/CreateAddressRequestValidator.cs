@@ -1,5 +1,4 @@
 ﻿using Core.Abstract;
-using Core.IoC;
 using Entities.Dto.RequestDto.AddressRequestDto;
 using FluentValidation;
 
@@ -7,11 +6,8 @@ namespace Business.Validation.DtoValidator
 {
     public class CreateAddressRequestValidator : AbstractValidator<CreateAddressRequest>
     {
-        private readonly ILocalizerService localizer;
-        public CreateAddressRequestValidator()
+        public CreateAddressRequestValidator(ILocalizerService localizer)
         {
-            localizer = Provider.Resolve<ILocalizerService>();
-
             RuleFor(x => x.Country)
                 .NotNull()
                 .WithMessage("CreateAddressRequestValidator.CountryNotNull");

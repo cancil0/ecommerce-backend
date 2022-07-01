@@ -16,11 +16,13 @@ namespace Business.Concrete
         private readonly IUserRoleDal userRoleDal;
         private readonly IUserDal userDal;
         private readonly IRoleDal roleDal;
-        public UserRoleService()
+        public UserRoleService(IUserRoleDal userRoleDal, 
+                               IUserDal userDal, 
+                               IRoleDal roleDal)
         {
-            userRoleDal = Resolve<IUserRoleDal>();
-            roleDal = Resolve<IRoleDal>();
-            userDal = Resolve<IUserDal>();
+            this.userRoleDal = userRoleDal;
+            this.userDal = userDal;
+            this.roleDal = roleDal;
         }
         public void AddUserRole(AddUserRoleRequest userRoleRequest)
         {

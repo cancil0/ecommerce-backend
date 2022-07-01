@@ -1,11 +1,12 @@
-﻿using Entities.Concrete;
+﻿using Core.Abstract;
+using Entities.Concrete;
 using FluentValidation;
 
 namespace Business.Validation.EntityValidator
 {
     public class UserValidator : AbstractValidator<User>
     {
-        public UserValidator()
+        public UserValidator(ILocalizerService localizer)
         {
             RuleFor(x => x.Name)
                 .NotNull()

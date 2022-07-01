@@ -17,10 +17,11 @@ namespace Business.Concrete
         private readonly IUserDal userDal;
         private readonly ITokenService tokenService;
 
-        public LoginService()
+        public LoginService(IUserDal userDal,
+                            ITokenService tokenService)
         {
-            userDal = Resolve<IUserDal>();
-            tokenService = Resolve<ITokenService>();
+            this.userDal = userDal;
+            this.tokenService = tokenService;
         }
 
         [Loggable(IsRequestLoggable = false)]
@@ -32,19 +33,19 @@ namespace Business.Concrete
         }
 
         [Loggable(IsRequestLoggable = false, IsResponseLoggable = false)]
-        public async Task<string> Login(LoginRequest loginRequest)
+        public async Task<string> Login(LoginRequest loginRequest, CancellationToken cancellationToken = default)
         {
-            var user = userDal.Get(new GetUserRequest()
+            var user = userDal.GetAsync(new GetUserRequest()
             {
                 Email = loginRequest.Email,
                 MobileNo = loginRequest.MobileNo,
                 UserName = loginRequest.UserName
-            });
+            }, true, cancellationToken);
 
-            if (user.Password != loginRequest.Password)
+            if (user.Result.Password != loginRequest.Password)
                 throw new AppException("Login.CheckCredentials", ExceptionTypes.NotAllowed.GetValue());
 
-            return await tokenService.GenerateToken(user);
+            return await tokenService.GenerateToken(user.Result, cancellationToken);
         }
 
         private static string GeneratePassword(int length = 12)

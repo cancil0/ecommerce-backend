@@ -5,7 +5,7 @@ namespace Business.Abstract
 {
     public interface ILoginService
     {
-        Task<string> Login(LoginRequest loginRequest);
+        Task<string> Login(LoginRequest loginRequest, CancellationToken cancellationToken = default);
         void ForgotMyPassword(GetUserRequest getUserRequest);
     }
 }

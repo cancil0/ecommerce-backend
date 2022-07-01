@@ -16,12 +16,15 @@ namespace Business.Concrete
         private readonly IRoleDal roleDal;
         private readonly IApiRoleDal apiRoleDal;
         private readonly IMemoryCache cache;
-        public ApiRoleService()
+        public ApiRoleService(IApiRoleDal apiRoleDal, 
+                              IApiDal apiDal, 
+                              IRoleDal roleDal, 
+                              IMemoryCache cache)
         {
-            cache = Resolve<IMemoryCache>();
-            apiDal = Resolve<IApiDal>();
-            roleDal = Resolve<IRoleDal>();
-            apiRoleDal = Resolve<IApiRoleDal>();
+            this.apiRoleDal = apiRoleDal;
+            this.apiDal = apiDal;
+            this.roleDal = roleDal;
+            this.cache = cache;
         }
         public void AddApiRole(ApiRoleRequest apiRoleRequest)
         {

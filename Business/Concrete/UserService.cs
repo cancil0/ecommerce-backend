@@ -17,11 +17,13 @@ namespace Business.Concrete
         private readonly IUserDal userDal;
         private readonly IRoleDal roleDal;
         private readonly IMapper mapper;
-        public UserService()
+        public UserService(IUserDal userDal, 
+                           IRoleDal roleDal, 
+                           IMapper mapper)
         {
-            mapper = Resolve<IMapper>();
-            userDal = Resolve<IUserDal>();
-            roleDal = Resolve<IRoleDal>();
+            this.userDal = userDal;
+            this.roleDal = roleDal;
+            this.mapper = mapper;
         }
 
         [Loggable(IsResponseLoggable = false)]

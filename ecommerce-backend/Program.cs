@@ -1,39 +1,37 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolver.Autofac;
-using Business.Mapping;
 using Business.Validation.EntityValidator;
 using Core.Extension;
 using FluentValidation.AspNetCore;
+using Newtonsoft.Json.Serialization;
 using NLog;
 using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 LogManager.LoadConfiguration(string.Format("{0}{1}", Directory.GetCurrentDirectory(), "/nlog.config"));
-builder.Services.AddMemoryCache(x => x.ExpirationScanFrequency = TimeSpan.FromMinutes(30));
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 
-// Add services to the container.
 builder.Services.AddMemoryCache(x => x.ExpirationScanFrequency = TimeSpan.FromMinutes(30));
 builder.Services.AddControllers()
-    .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
+    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+    .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 builder.Services.AddFluentValidation(x => 
 {
     x.RegisterValidatorsFromAssemblyContaining<UserValidator>();
     x.ValidatorOptions.CascadeMode = FluentValidation.CascadeMode.Stop;
 });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.IntegrateSwagger();
 builder.Services.JwtSettings(builder.Configuration);
 builder.Services.AddDbContext(builder.Configuration);
 builder.Services.GetConfiguration(builder.Configuration);
 builder.Services.InjectServices();
-builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
+builder.Services.AddAutofacContainer();
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new AutofacBusinessModule()));
-builder.Logging.ClearProviders();
-builder.Host.UseNLog();
-
+builder.Host.ConfigureContainer<ContainerBuilder>(x => x.RegisterModule(new AutofacBusinessModule()));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

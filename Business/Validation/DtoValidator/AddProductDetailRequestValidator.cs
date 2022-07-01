@@ -1,5 +1,4 @@
 ﻿using Core.Abstract;
-using Core.IoC;
 using Entities.Dto.RequestDto.ProductDetailRequestDto;
 using FluentValidation;
 
@@ -7,11 +6,8 @@ namespace Business.Validation.DtoValidator
 {
     public class AddProductDetailRequestValidator : AbstractValidator<AddProductDetailRequest>
     {
-        private readonly ILocalizerService localizer;
-        public AddProductDetailRequestValidator()
+        public AddProductDetailRequestValidator(ILocalizerService localizer)
         {
-            localizer = Provider.Resolve<ILocalizerService>();
-
             RuleFor(x => x.ProductId)
                 .Must(x => x != Guid.Empty)
                 .WithMessage(localizer.GetResource("ProductDetail.ChooseProductToAdd"));

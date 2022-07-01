@@ -1,10 +1,16 @@
 ﻿using Core.IoC;
 using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog.Extensions.Logging;
+using System.Reflection;
 using System.Text;
 
 namespace Core.Extension
@@ -75,14 +81,110 @@ namespace Core.Extension
             ContextConfiguration.ConnectionString = configuration.GetConnectionString("Connection");
             NLog.LogManager.Configuration.Variables["ConnectionString"] = ContextConfiguration.ConnectionString;
 
-            services.AddDbContext<Context>();
+            LoggerFactory LoggerFactory = new(new[] { new NLogLoggerProvider() });
+            services.AddDbContext<Context>(optionsBuilder =>
+            {
+                optionsBuilder
+                    .UseLoggerFactory(LoggerFactory)
+                    .UseNpgsql(ContextConfiguration.ConnectionString, o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
+                    .UseMemoryCache(Provider.Resolve<IMemoryCache>())
+                    .EnableSensitiveDataLogging(configuration.GetBoolValue("EnableSensitiveDataLogging"))
+                    .EnableDetailedErrors();
+            });
 
             return services;
+        }
+
+        public static bool GetBoolValue(this IConfiguration configuration, string key)
+        {
+            return configuration[key].ToBoolean();
         }
 
         public static IServiceCollection GetConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             Provider.Configuration = configuration;
+            return services;
+        }
+
+        public static IServiceCollection InjectNotGenerics(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IHttpContextAccessor), typeof(HttpContextAccessor));
+            services.AddScoped(typeof(IMemoryCache), typeof(MemoryCache));
+            return services;
+        }
+
+        public static IServiceCollection InjectMiddlewares(this IServiceCollection services)
+        {
+            Assembly.Load("Core")
+                .GetTypes()
+                .Where(x => !string.IsNullOrEmpty(x.Namespace))
+                .Where(x => x.IsClass)
+                .Where(x => x.Namespace.StartsWith("Core.Middleware"))
+                .ToList()
+                .ForEach(assignedTypes =>
+                {
+                    services.AddScoped(assignedTypes);
+                });
+
+            return services;
+        }
+
+        public static IServiceCollection InjectCoreServices(this IServiceCollection services)
+        {
+            Assembly.Load("Core")
+                .GetTypes()
+                .Where(x => !string.IsNullOrEmpty(x.Namespace))
+                .Where(x => x.IsClass)
+                .Where(x => x.Namespace.StartsWith("Core.Concrete") && x.Name.Contains("Service") && !x.Name.Contains("Base"))
+                .ToList()
+                .ForEach(assignedTypes =>
+                {
+                    var serviceType = assignedTypes.GetInterfaces().First(i => i.Namespace.StartsWith("Core.Abstract"));
+                    services.AddScoped(serviceType, assignedTypes);
+                });
+
+            return services;
+        }
+
+        public static IServiceCollection InjectBusinessServices(this IServiceCollection services)
+        {
+            Assembly.Load("Business")
+                .GetTypes()
+                .Where(x => !string.IsNullOrEmpty(x.Namespace))
+                .Where(x => x.IsClass)
+                .Where(x => x.Namespace.StartsWith("Business.Concrete") && x.Name.Contains("Service"))
+                .ToList()
+                .ForEach(assignedTypes =>
+                {
+                    var serviceType = assignedTypes.GetInterfaces().First(i => i.Namespace.StartsWith("Business.Abstract"));
+                    services.AddScoped(serviceType, assignedTypes);
+                });
+
+            return services;
+        }
+        public static IServiceCollection InjectDataAccessServices(this IServiceCollection services)
+        {
+            Assembly.Load("DataAccess")
+                .GetTypes()
+                .Where(x => !string.IsNullOrEmpty(x.Namespace))
+                .Where(x => x.IsClass)
+                .Where(x => x.Namespace.StartsWith("DataAccess.Concrete") && x.Name.EndsWith("Dal"))
+                .ToList()
+                .ForEach(assignedTypes =>
+                {
+                    var serviceType = assignedTypes.GetInterfaces().First(i => i.Namespace.StartsWith("DataAccess.Abstract"));
+                    services.AddScoped(serviceType, assignedTypes);
+                });
+            return services;
+        }
+
+        public static IServiceCollection InjectServices(this IServiceCollection services)
+        {
+            services.InjectCoreServices();
+            services.InjectNotGenerics();
+            services.InjectMiddlewares();
+            services.InjectBusinessServices();
+            services.InjectDataAccessServices();
             return services;
         }
     }

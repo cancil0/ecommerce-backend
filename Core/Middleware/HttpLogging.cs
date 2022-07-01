@@ -23,7 +23,7 @@ namespace Core.Middleware
             context.Response.OnStarting(() =>
             {
                 stopwatch.Stop();
-
+                context.Response.ContentType = "application/json";
                 context.Response.Headers["duration"] = stopwatch.ElapsedMilliseconds.ToString();
 
                 var properties = new List<KeyValuePair<string, object>>()
@@ -37,9 +37,13 @@ namespace Core.Middleware
                 };
 
                 NLog.ScopeContext.PushProperties(properties);
-                loggerService.LogToFile("Logging.HttpServiceFinished", stopwatch.ElapsedMilliseconds.ToString());
-                loggerService.LogToDatabase();
-
+                loggerService.LogDebug("Logging.HttpServiceFinished", stopwatch.ElapsedMilliseconds.ToString());
+                loggerService.LogDebug("ServiceName:{0} | StatusCode:{1} | HttpMethod:{2} | RouteUrl:{3}", 
+                    context.Request.Path.Value.Split("/")[3], 
+                    context.Response.StatusCode.ToString(),
+                    context.Request.Method,
+                    context.Request.Path);
+                
                 return Task.CompletedTask;
             });
 

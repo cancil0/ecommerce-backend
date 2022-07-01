@@ -23,7 +23,7 @@ namespace ecommerce_backend.Controllers.EntityController
         [HttpGet]
         [AllowAnonymous]
         [Route("GetCarousel")]
-        public ActionResult GetCarousel([FromQuery] Guid carouselId)
+        public ActionResult<Carousel> GetCarousel([FromQuery] Guid carouselId)
         {
             return Ok(carouselService.GetCarousel(carouselId));
         }
@@ -35,7 +35,7 @@ namespace ecommerce_backend.Controllers.EntityController
         [HttpGet]
         [AllowAnonymous]
         [Route("GetCarousels")]
-        public ActionResult GetCarousels()
+        public ActionResult<List<Carousel>> GetCarousels()
         {
             return Ok(carouselService.GetCarousels());
         }
@@ -46,7 +46,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="addCarousel"></param>
         /// <returns></returns>
         [HttpPost]
-        [AllowAnonymous]
         [Route("AddCarousel")]
         public ActionResult AddCarousel([FromBody] AddCarouselRequest addCarousel)
         {

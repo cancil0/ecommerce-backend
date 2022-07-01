@@ -12,14 +12,17 @@ namespace Business.Concrete
 {
     public class ProductService : BaseService<Product>, IProductService
     {
-        private readonly IMapper mapper;
-        private readonly IProductDal productDal;
         private readonly ICategoryDal categoryDal;
-        public ProductService()
+        private readonly IProductDal productDal;
+        private readonly IMapper mapper;
+        
+        public ProductService(ICategoryDal categoryDal, 
+                              IProductDal productDal, 
+                              IMapper mapper)
         {
-            mapper = Resolve<IMapper>();
-            productDal = Resolve<IProductDal>();
-            categoryDal = Resolve<ICategoryDal>();
+            this.categoryDal = categoryDal;
+            this.productDal = productDal;
+            this.mapper = mapper;
         }
 
         public void AddProduct(AddProductRequest addProduct)
