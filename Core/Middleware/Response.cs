@@ -1,7 +1,9 @@
-﻿using Core.ExceptionHandler;
+﻿using Core.Abstract;
+using Core.ExceptionHandler;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 
@@ -9,11 +11,32 @@ namespace Core.Middleware
 {
     public class Response : IMiddleware
     {
+        private readonly ILoggerService loggerService;
+        public Response(ILoggerService loggerService)
+        {
+            this.loggerService = loggerService;
+        }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            var request = context.Request;
+            request.EnableBuffering();
+            var buffer = new byte[Convert.ToInt32(request.ContentLength)];
+            await request.Body.ReadAsync(buffer);
+            var requestData = Encoding.UTF8.GetString(buffer);
+            if (string.IsNullOrEmpty(requestData) && (context.Request.Method == "GET" || context.Request.Method == "DELETE"))
+            {
+                if (context.Request.QueryString.HasValue)
+                    requestData = context.Request.QueryString.Value;
+                else
+                    requestData = context.Request.Path.Value.Split('/').Last();
+            }
+            request.Body.Position = 0;
+
             Stream responseBody = context.Response.Body;
             using var memoryStream = new MemoryStream();
             context.Response.Body = memoryStream;
+
             await next(context);
 
             memoryStream.Position = 0;
@@ -22,6 +45,9 @@ namespace Core.Middleware
             byte[] responseBytes = Encoding.UTF8.GetBytes(wrappedResponse);
             context.Response.Body = responseBody;
             context.Response.ContentLength = responseBytes.Length;
+            stopwatch.Stop();
+            context.Items["Duration"] = stopwatch.ElapsedMilliseconds.ToString();
+            loggerService.LogToApiCallLog(context, requestData, wrappedResponse);
             await context.Response.Body.WriteAsync(responseBytes);
         }
 

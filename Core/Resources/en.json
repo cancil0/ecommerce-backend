@@ -101,5 +101,9 @@
     "KeyCanNotBeNull": "Key can not be null.",
     "KeyNotFound": "Key not found: {0}",
     "KeyIsNull": "Key which will be translated is null."
+  },
+  "DbContext": {
+    "CommitedSuccessfully": "Changes are committed to database successfully. DbContext Id: {0}",
+    "NotCommitedSuccessfully": "Changes are not committed to database successfully. DbContext Id: {0}"
   }
 }

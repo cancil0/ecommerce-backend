@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Entities.Dto.RequestDto.LoginRequestDto;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ namespace ecommerce_backend.Controllers.EntityController
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
+    [Logger(IsRequestLoggable = false, IsResponseLoggable = false)]
     public class LoginController : ControllerBase
     {
         private readonly ILoginService loginService;
@@ -34,6 +36,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [UnitofWork]
         [Route("ForgotMyPassword")]
         public ActionResult ForgotMyPassword([FromBody] GetUserRequest userRequest)
         {

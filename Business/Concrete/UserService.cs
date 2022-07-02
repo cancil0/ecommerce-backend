@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Business.Abstract;
-using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -9,6 +8,7 @@ using Entities.Dto.RequestDto.UserRequestDto;
 using Entities.Dto.ResponseDto.UserResponseDto;
 using Entities.Dto.ResponseDto.UserRoleResponseDto;
 using Entities.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Concrete
 {
@@ -26,14 +26,12 @@ namespace Business.Concrete
             this.mapper = mapper;
         }
 
-        [Loggable(IsResponseLoggable = false)]
         public GetUserResponse GetUser(GetUserRequest getUserRequest)
         {
             var user = userDal.Get(getUserRequest);
             return mapper.Map<GetUserResponse>(user);
         }
 
-        [Loggable(IsResponseLoggable = false)]
         public GetUserResponse GetUserById(Guid id)
         {
             var user = userDal.GetById(id);
@@ -44,18 +42,17 @@ namespace Business.Concrete
             return mapper.Map<GetUserResponse>(user);
         }
 
-        [Loggable(IsResponseLoggable = false)]
         public GetUserResponse GetUserAllInfo(GetUserRequest getUserRequest)
         {
             var user = userDal.Get(x => x.UserName == getUserRequest.UserName ||
                                                             x.Email == getUserRequest.Email ||
                                                             x.MobileNo == getUserRequest.MobileNo,
-                                                            x => x.Addresses,
-                                                            x => x.Cart,
-                                                            x => x.Purchases,
-                                                            x => x.UserRoles,
-                                                            x => x.UserDefault,
-                                                            x => x.UserRoles);
+                                                            x => x.Include(x => x.Addresses)
+                                                                  .Include(x => x.Cart)
+                                                                  .Include(x => x.Purchases)
+                                                                  .Include(x => x.UserDefault)
+                                                                  .Include(x => x.UserRoles)
+                                                                    .ThenInclude(x => x.Role));
 
             if (user == null)
                 throw new AppException("User.NotFound", ExceptionTypes.NotFound.GetValue());
@@ -73,7 +70,6 @@ namespace Business.Concrete
             return result;
         }
 
-        [Loggable(IsRequestLoggable = false)]
         public string CreateUser(CreateUserRequest createRequest)
         {
             var isUserExist = userDal.GetCreateUser(new GetUserRequest
@@ -130,7 +126,6 @@ namespace Business.Concrete
             return user.UserName;
         }
 
-        [Loggable(IsRequestLoggable = false, IsResponseLoggable = false)]
         public void UpdateUser(UserUpdateRequest userUpdate)
         {
             var user = userDal.Get(x => x.UserName == userUpdate.OldUserName);

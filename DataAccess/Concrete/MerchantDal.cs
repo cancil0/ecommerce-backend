@@ -4,6 +4,7 @@ using DataAccess.Repository;
 using Entities.Concrete;
 using Entities.Enums;
 using Infrastructure.Concrete;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Concrete
 {
@@ -13,7 +14,7 @@ namespace DataAccess.Concrete
 
         public Merchant GetMerchantById(Guid merchantId, bool throwException)
         {
-            var merchant = Get(x => x.MerchantId == merchantId, x => x.Address, x => x.ProductDetails);
+            var merchant = Get(x => x.MerchantId == merchantId, x => x.Include(x => x.Address).Include(x => x.ProductDetails));
             if (throwException && merchant == null)
             {
                 throw new AppException("Merchant.NotFound", ExceptionTypes.NotFound.GetValue());

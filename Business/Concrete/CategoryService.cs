@@ -32,13 +32,15 @@ namespace Business.Concrete
                 return categoryResponse.FirstOrDefault(x => x.CategoryId == categoryId);
             }
             var category = categoryDal.GetById(categoryId);
-            categoryResponse = new List<GetCategoryResponse>();
-            categoryResponse.Add(new GetCategoryResponse()
+            categoryResponse = new List<GetCategoryResponse>
             {
-                CategoryId = category.CategoryId,
-                Name = category.Name,
-                ParentCategoryId = category.ParentCategoryId
-            });
+                new GetCategoryResponse()
+                {
+                    CategoryId = category.CategoryId,
+                    Name = category.Name,
+                    ParentCategoryId = category.ParentCategoryId
+                }
+            };
 
             return categoryResponse.FirstOrDefault();
         }
@@ -86,7 +88,7 @@ namespace Business.Concrete
             {
                 throw new AppException("Category.EnterCategoryName", ExceptionTypes.NotAllowed.GetValue());
             }
-            var category = categoryDal.GetAsNoTracking(x => x.CategoryId == deleteCategory.CategoryId || x.Name == deleteCategory.CategoryName);
+            var category = categoryDal.Get(x => x.CategoryId == deleteCategory.CategoryId || x.Name == deleteCategory.CategoryName);
 
             if(category is null)
             {
@@ -105,7 +107,7 @@ namespace Business.Concrete
                 ParentCategoryId = updateCategory.ParentCategoryId
             });
 
-            var category = categoryDal.GetAsNoTracking(x => x.CategoryId == updateCategory.CategoryId);
+            var category = categoryDal.Get(x => x.CategoryId == updateCategory.CategoryId);
             mapper.Map(updateCategory, category);
             categoryDal.Update(category);
             cache.Remove(CacheTypes.CategoryResponse.GetValue());
@@ -137,7 +139,7 @@ namespace Business.Concrete
             }
             else
             {
-                var categoryName = categoryDal.GetAsNoTracking(x => x.Name == categoryValidation.Name)?.Name;
+                var categoryName = categoryDal.Get(x => x.Name == categoryValidation.Name, null, true)?.Name;
                 if (!string.IsNullOrEmpty(categoryName))
                 {
                     throw new AppException("Category.AlreadyAdded", ExceptionTypes.BadRequest.GetValue(), categoryName);
@@ -146,7 +148,7 @@ namespace Business.Concrete
 
             if (categoryValidation.ParentCategoryId is not null)
             {
-                var parentCategory = categoryDal.GetAsNoTracking(x => x.CategoryId == (Guid)categoryValidation.ParentCategoryId);
+                var parentCategory = categoryDal.Get(x => x.CategoryId == (Guid)categoryValidation.ParentCategoryId, null, true);
 
                 if (parentCategory is null)
                 {

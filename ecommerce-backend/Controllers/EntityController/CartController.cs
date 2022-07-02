@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Entities.Dto.RequestDto.CartRequestDto;
 using Entities.Dto.ResponseDto.CartResponseDto;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,7 @@ namespace ecommerce_backend.Controllers.EntityController
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
+    [Logger]
     public class CartController : ControllerBase
     {
         private readonly ICartService cartService;
@@ -35,6 +37,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="addProduct"></param>
         /// <returns></returns>
         [HttpPost]
+        [UnitofWork]
         [Route("AddProductToCart")]
         public ActionResult AddProductToCart([FromBody] AddProductToCartRequest addProduct)
         {
@@ -48,6 +51,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="removeProduct"></param>
         /// <returns></returns>
         [HttpDelete]
+        [UnitofWork]
         [Route("RemoveProductFromCart")]
         public ActionResult RemoveProductFromCart([FromBody] RemoveProductFromCartRequest removeProduct)
         {
@@ -61,6 +65,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="cartId"></param>
         /// <returns></returns>
         [HttpDelete]
+        [UnitofWork]
         [Route("RemoveAllProductsFromCart")]
         public ActionResult RemoveAllProductsFromCart([FromQuery] Guid cartId)
         {

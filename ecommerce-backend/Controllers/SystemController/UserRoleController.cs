@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Entities.Dto.RequestDto.UserRoleRequestDto;
 using Entities.Dto.ResponseDto.UserRoleResponseDto;
@@ -8,6 +9,7 @@ namespace ecommerce_backend.Controllers.SystemController
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Logger]
     public class UserRoleController : ControllerBase
     {
         private readonly IUserRoleService userRoleService;
@@ -22,6 +24,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// <returns></returns>
         [HttpPost]
         [Route("GetUserRoles")]
+        [Logger(IsResponseLoggable = false)]
         public ActionResult<List<UserRoleResponse>> GetUserRoles([FromBody] GetUserRequest getUser)
         {
             return Ok(userRoleService.GetUserRoles(getUser));
@@ -32,7 +35,9 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [UnitofWork]
         [Route("AddUserRole")]
+        [Logger(IsRequestLoggable = false)]
         public ActionResult AddUserRole([FromBody] AddUserRoleRequest addUserRole)
         {
             userRoleService.AddUserRole(addUserRole);
@@ -44,6 +49,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
+        [UnitofWork]
         [Route("DeleteUserRole")]
         public ActionResult DeleteUserRole([FromBody] AddUserRoleRequest addUserRole)
         {

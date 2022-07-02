@@ -7,6 +7,7 @@ using Entities.Concrete;
 using Entities.Dto.RequestDto.ProductRequestDto;
 using Entities.Dto.ResponseDto.ProductResponseDto;
 using Entities.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Concrete
 {
@@ -73,7 +74,10 @@ namespace Business.Concrete
                 throw new AppException("Product.EnterProductId", ExceptionTypes.BadRequest.GetValue());
             }
 
-            var product = productDal.Get(x => x.ProductId == productId, x=> x.ProductDetails, x => x.Medias, x => x.Category);
+            var product = productDal.Get(x => x.ProductId == productId, 
+                                         x => x.Include(x => x.ProductDetails)
+                                               .Include(x => x.Medias)
+                                               .Include(x => x.Category));
 
             if (product is null)
             {

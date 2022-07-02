@@ -1,6 +1,5 @@
 ﻿using Business.Abstract;
 using Core.Abstract;
-using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -8,6 +7,8 @@ using Entities.Concrete;
 using Entities.Dto.RequestDto.LoginRequestDto;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Entities.Enums;
+using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Business.Concrete
@@ -24,7 +25,6 @@ namespace Business.Concrete
             this.tokenService = tokenService;
         }
 
-        [Loggable(IsRequestLoggable = false)]
         public void ForgotMyPassword(GetUserRequest getUserRequest)
         {
             var user = userDal.Get(getUserRequest);
@@ -32,15 +32,18 @@ namespace Business.Concrete
             userDal.Update(user);
         }
 
-        [Loggable(IsRequestLoggable = false, IsResponseLoggable = false)]
         public async Task<string> Login(LoginRequest loginRequest, CancellationToken cancellationToken = default)
         {
-            var user = userDal.GetAsync(new GetUserRequest()
-            {
-                Email = loginRequest.Email,
-                MobileNo = loginRequest.MobileNo,
-                UserName = loginRequest.UserName
-            }, true, cancellationToken);
+            var predicate = PredicateBuilder.New<User>()
+                .Or(x => x.Email == loginRequest.Email)
+                .Or(x => x.UserName == loginRequest.UserName)
+                .Or(x => x.MobileNo == loginRequest.MobileNo);
+
+            var user = userDal.GetAsync(predicate, x => x.Include(x => x.UserRoles)
+                                                            .ThenInclude(x => x.Role), false, cancellationToken);
+
+            if (user == null)
+                throw new AppException("User.NotFound", ExceptionTypes.NotFound.GetValue());
 
             if (user.Result.Password != loginRequest.Password)
                 throw new AppException("Login.CheckCredentials", ExceptionTypes.NotAllowed.GetValue());

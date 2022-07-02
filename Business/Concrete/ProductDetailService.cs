@@ -8,6 +8,7 @@ using Entities.Dto.RequestDto.ProductDetailRequestDto;
 using Entities.Dto.ResponseDto.ProductDetailResponseDto;
 using Entities.Enums;
 using LinqKit;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.Concrete
 {
@@ -76,7 +77,7 @@ namespace Business.Concrete
                 .And(x => x.Product.ProductId == updateProductDetail.ProductId)
                 .And(x => x.Merchant.MerchantId == updateProductDetail.MerchantId);
 
-            var productDetail = productDetailDal.Get(predicate, x => x.Merchant);
+            var productDetail = productDetailDal.Get(predicate, x => x.Include(x => x.Merchant));
 
             mapper.Map(updateProductDetail, productDetail);
 

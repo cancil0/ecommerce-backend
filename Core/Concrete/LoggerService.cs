@@ -1,5 +1,8 @@
 ﻿using Core.Abstract;
+using Core.Attributes;
+using Core.Extension;
 using Core.IoC;
+using Entities.Concrete;
 using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Http;
 using NLog;
@@ -17,10 +20,12 @@ namespace Core.Concrete
 
         private readonly ILocalizerService localizerService;
         private readonly ILogger logger;
+        private readonly Context dbContext;
 
-        public LoggerService(ILocalizerService localizerService)
+        public LoggerService(ILocalizerService localizerService, Context dbContext)
         {
             this.localizerService = localizerService;
+            this.dbContext = dbContext;
             logger = LogManager.GetCurrentClassLogger();
         }
 
@@ -46,7 +51,7 @@ namespace Core.Concrete
             };
 
             target.Parameters.Add(new DatabaseParameterInfo("GUID", Guid.NewGuid().ToString()));
-            target.Parameters.Add(new DatabaseParameterInfo("USER_NAME", "default" ?? context.Items["userName"].ToString()));
+            target.Parameters.Add(new DatabaseParameterInfo("USER_NAME", "default" ?? context.Items["UserName"].ToString()));
             target.Parameters.Add(new DatabaseParameterInfo("STATUS_CODE", context.Response.StatusCode.ToString()));
             target.Parameters.Add(new DatabaseParameterInfo("METHOD", context.Request.Path.Value.Split("/")[3]));
             target.Parameters.Add(new DatabaseParameterInfo("SERVICE_NAME", context.Request.Path.Value.Split("/")[2]));
@@ -61,6 +66,36 @@ namespace Core.Concrete
 
             Logger logger = LogManager.GetLogger("DatabaseLogger");
             logger.Debug("Logged to db");
+        }
+
+        public void LogToApiCallLog(HttpContext context, string request, string response)
+        {
+            var loggerController = context.GetEndpoint().Metadata.GetMetadata<LoggerAttribute>();
+
+            if (loggerController != null)
+            {
+                var isRequestLoggable = loggerController.IsRequestLoggable;
+                var isResponseLoggable = loggerController.IsResponseLoggable;
+                var correlationId = context.Items["CorrelationId"].ToString();
+                var apiId = Guid.ParseExact(correlationId, "N");
+
+                dbContext.Set<ApiLog>().Add(new ApiLog()
+                {
+                    ApiLogId = apiId,
+                    Request = isRequestLoggable ? request : null,
+                    Response = isResponseLoggable ? response : null,
+                    StatusCode = context.Response.StatusCode,
+                    ServiceName = context.Request.Path.Value.Split("/")[3],
+                    RouteUrl = context.Request.Path,
+                    Method = context.Request.Method,
+                    Duration = context.Items["Duration"].ToString().ToLong(),
+                    UserName = context.Items["UserName"]?.ToString() ?? Environment.MachineName,
+                    CreatedDate = DateTime.Now.DateToInt(),
+                    CreatedTime = DateTime.Now.TimeToInt(),
+                });
+
+                dbContext.SaveChanges();
+            }
         }
     }
 }

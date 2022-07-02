@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -55,7 +54,6 @@ namespace Business.Concrete
             userRoleDal.Delete(userRole);
         }
 
-        [Loggable(IsResponseLoggable = false)]
         public List<UserRoleResponse> GetUserRoles(GetUserRequest userRequest)
         {
             var user = userDal.Get(userRequest);

@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Entities.Dto.RequestDto.ProductDetailRequestDto;
 using Entities.Dto.ResponseDto.ProductDetailResponseDto;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ namespace ecommerce_backend.Controllers.EntityController
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Logger]
     public class ProductDetailController : ControllerBase
     {
         private readonly IProductDetailService productDetailService;
@@ -34,6 +36,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="addProductDetail"></param>
         /// <returns></returns>
         [HttpPost]
+        [UnitofWork]
         [Route("AddProductDetail")]
         public ActionResult AddProductDetail([FromBody] AddProductDetailRequest addProductDetail)
         {
@@ -47,6 +50,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="updateProductDetail"></param>
         /// <returns></returns>
         [HttpPut]
+        [UnitofWork]
         [Route("UpdateProductDetail")]
         public ActionResult UpdateProductDetail([FromBody] UpdateProductDetailRequest updateProductDetail)
         {

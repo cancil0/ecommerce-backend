@@ -1,4 +1,6 @@
-﻿namespace Core.Abstract
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Core.Abstract
 {
     public interface ILoggerService
     {
@@ -8,5 +10,6 @@
         void LogError(string key, params string[] args);
         void LogException(Exception exception, string message);
         void Logger(object requestData, object responseData);
+        void LogToApiCallLog(HttpContext context, string request, string response);
     }
 }

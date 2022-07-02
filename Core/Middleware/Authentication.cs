@@ -4,6 +4,7 @@ using Entities.Concrete;
 using Entities.Dto.ResponseDto.ApiRoleResponse;
 using Entities.Enums;
 using Infrastructure.Concrete;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -24,9 +25,9 @@ namespace Core.Middleware
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var notCheckToken = context.GetEndpoint().Metadata.Select(x => x.GetType()).Any(x => x.Name == "AllowAnonymousAttribute");
+            var isAllowAnonymousController = context.GetEndpoint().Metadata.GetMetadata<AllowAnonymousAttribute>();
 
-            if (!notCheckToken)
+            if (isAllowAnonymousController == null)
             {
                 CheckToken(context);
             }
@@ -66,7 +67,7 @@ namespace Core.Middleware
                     Roles = jwtToken.Claims.Where(x => x.Type == "roles").Select(x => x.Value).ToList(),
                 };
 
-                context.Items.Add("userName", user.UserName);
+                context.Items.Add("UserName", user.UserName);
 
                 if (user.Roles.Count == 0)
                 {

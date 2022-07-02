@@ -2,9 +2,11 @@
 using Core.ExceptionHandler;
 using Core.IoC;
 using Core.Middleware;
+using Entities.Enums;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace Core.Extension
@@ -37,6 +39,7 @@ namespace Core.Extension
             app.UseMiddleware<Response>();
             app.ConfigureException();
             app.UseMiddleware<Authentication>();
+            app.UseMiddleware<DbContextHandler>();
 
             return app;
         }
@@ -53,17 +56,24 @@ namespace Core.Extension
             var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
             if (contextFeature != null)
             {
+                var loggerService = Provider.Resolve<ILoggerService>();
                 switch (contextFeature.Error)
                 {
                     case AppException exception:
                         {
-                            Provider.Resolve<ILoggerService>().LogError(contextFeature.Error.Message);
+                            loggerService.LogError(contextFeature.Error.Message);
                             context.Response.StatusCode = exception.ExceptionType.ToInt();
+                            break;
+                        }
+                    case DbUpdateException exception:
+                        {
+                            loggerService.LogError(exception.InnerException.Message);
+                            context.Response.StatusCode = ExceptionTypes.InternalServerError.GetValue().ToInt();
                             break;
                         }
                     default:
                         {
-                            Provider.Resolve<ILoggerService>().LogException(contextFeature.Error, contextFeature.Error.Message);
+                            loggerService.LogException(contextFeature.Error, contextFeature.Error.Message);
                             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                             break;
                         }

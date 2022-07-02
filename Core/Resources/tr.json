@@ -101,5 +101,9 @@
     "KeyCanNotBeNull": "Key boş olamaz.",
     "KeyNotFound": "Key bulunamadı: {0}",
     "KeyIsNull": "Çevrilecek Key bulunamadı."
+  },
+  "DbContext": {
+    "CommitedSuccessfully": "Değişiklikler başarılı bir şekilde veri tabanına kaydedildi. DbContext Id: {0}",
+    "NotCommitedSuccessfully": "Değişiklikler başarılı bir şekilde veri tabanına kaydedilemedi. DbContext Id: {0}"
   }
 }

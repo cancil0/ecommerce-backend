@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Entities.Dto.RequestDto.CategoryRequestDto;
 using Entities.Dto.ResponseDto.CategoryResponseDto;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ namespace ecommerce_backend.Controllers.EntityController
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Logger]
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService categoryService;
@@ -58,6 +60,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="addCategory"></param>
         /// <returns></returns>
         [HttpPost]
+        [UnitofWork]
         [Route("AddCategory")]
         public ActionResult AddCategory([FromBody] AddCategoryRequest addCategory)
         {
@@ -71,6 +74,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="categoryUpdate"></param>
         /// <returns></returns>
         [HttpPut]
+        [UnitofWork]
         [Route("UpdateCategory")]
         public ActionResult UpdateCategory([FromBody] UpdateCategoryRequest categoryUpdate)
         {
@@ -84,6 +88,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="deleteCategory"></param>
         /// <returns></returns>
         [HttpDelete]
+        [UnitofWork]
         [Route("DeleteCategory")]
         public ActionResult DeleteCategory([FromBody] DeleteCategoryRequest deleteCategory)
         {

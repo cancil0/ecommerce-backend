@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Entities.Dto.RequestDto.ApiRequestDto;
 using Entities.Dto.ResponseDto.ApiResponseDto;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ namespace ecommerce_backend.Controllers.SystemController
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Logger]
     public class ApiController : ControllerBase
     {
         private readonly IApiService apiService;
@@ -31,6 +33,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [UnitofWork]
         [Route("AddApi")]
         public ActionResult AddApi([FromBody] string apiPath)
         {
@@ -43,6 +46,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [UnitofWork]
         [Route("UpdateApi")]
         public ActionResult UpdateApi([FromBody] UpdateApiRequest updateApiRequest)
         {
@@ -55,6 +59,7 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
+        [UnitofWork]
         [Route("DeleteApi")]
         public ActionResult DeleteApi([FromBody] string apiPath)
         {

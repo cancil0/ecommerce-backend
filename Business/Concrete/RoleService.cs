@@ -49,7 +49,7 @@ namespace Business.Concrete
 
         public void DeleteRole(string roleName)
         {
-            var role = roleDal.GetAsNoTracking(x => x.RoleName == roleName);
+            var role = roleDal.Get(x => x.RoleName == roleName);
 
             if (role == null)
                 throw new AppException("Role.NotFound", ExceptionTypes.NotFound.GetValue());
@@ -59,7 +59,7 @@ namespace Business.Concrete
 
         public void UpdateRole(UpdateRoleRequest updateRoleRequest)
         {
-            var role = roleDal.GetAsNoTracking(x => x.RoleName == updateRoleRequest.OldRoleName);
+            var role = roleDal.Get(x => x.RoleName == updateRoleRequest.OldRoleName);
 
             if (role == null)
                 throw new AppException("Role.NotFound", ExceptionTypes.NotFound.GetValue());

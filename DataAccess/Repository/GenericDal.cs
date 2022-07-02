@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Concrete;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace DataAccess.Repository
@@ -24,14 +25,54 @@ namespace DataAccess.Repository
             return await dbSet.FindAsync(new object[] {id}, cancellationToken);
         }
 
-        public T Get(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
+        public T Get(Expression<Func<T, bool>> predicate,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            bool disableTracking = false)
         {
-            var query = dbSet.Where(expression);
-            return includes.Aggregate(query, (currrent, includeProperty) => currrent.Include(includeProperty)).FirstOrDefault();
+
+            IQueryable<T> query = dbSet;
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            return query.FirstOrDefault();
         }
-        public async Task<T> GetAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes)
+
+        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            bool disableTracking = false, CancellationToken cancellationToken = default)
         {
-            return await includes.Aggregate(dbSet.Where(expression), (currrent, includeProperty) => currrent.Include(includeProperty)).FirstOrDefaultAsync(cancellationToken);
+
+            IQueryable<T> query = dbSet;
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
         public T GetAsNoTracking(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
@@ -47,8 +88,7 @@ namespace DataAccess.Repository
 
         public List<T> GetMany(Expression<Func<T, bool>> expression, params Expression<Func<T, object>>[] includes)
         {
-            var query = dbSet.Where(expression);
-            return includes.Aggregate(query, (currrent, includeProperty) => currrent.Include(includeProperty)).ToList();
+            return includes.Aggregate(dbSet.Where(expression), (currrent, includeProperty) => currrent.Include(includeProperty)).ToList();
         }
         public async Task<List<T>> GetManyAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes)
         {
@@ -68,6 +108,12 @@ namespace DataAccess.Repository
         {
             IQueryable<T> query = dbSet;
             return includes.Aggregate(query, (currrent, includeProperty) => currrent.Include(includeProperty)).ToList();
+        }
+        public List<T> GetAllWithIncludes(Func<IQueryable<T>, IIncludableQueryable<T, object>> include)
+        {
+            IQueryable<T> query = dbSet;
+            query = include(query);
+            return query.ToList();
         }
         public async Task<List<T>> GetAllWithIncludeAsync(CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes)
         {
@@ -110,6 +156,5 @@ namespace DataAccess.Repository
         {
             dbSet.RemoveRange(item);
         }
-        
     }
 }

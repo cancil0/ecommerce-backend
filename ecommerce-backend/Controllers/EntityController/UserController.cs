@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Entities.Dto.ResponseDto.UserResponseDto;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpGet]
         [Route("GetById/{id}")]
+        [Logger(IsResponseLoggable = false)]
         public ActionResult<GetUserResponse> GetUserById([FromRoute] Guid id)
         {
             return Ok(userService.GetUserById(id));
@@ -34,6 +36,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("GetUser")]
+        [Logger(IsResponseLoggable = false)]
         public ActionResult<GetUserResponse> GetUser([FromBody] GetUserRequest getUser)
         {
             return Ok(userService.GetUser(getUser));
@@ -45,6 +48,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("GetUserAllInfo")]
+        [Logger(IsResponseLoggable = false)]
         public ActionResult<GetUserResponse> GetUserAllInfo([FromBody] GetUserRequest getUser)
         {
             return Ok(userService.GetUserAllInfo(getUser));
@@ -56,8 +60,10 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="User"></param>
         /// <returns></returns>
         [HttpPost]
+        [UnitofWork]
         [Route("CreateUser")]
         [AllowAnonymous]
+        [Logger(IsRequestLoggable = false)]
         public ActionResult<string> CreateUser([FromBody] CreateUserRequest userRequest)
         {
             return Ok(userService.CreateUser(userRequest));
@@ -69,7 +75,9 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="User"></param>
         /// <returns></returns>
         [HttpPut]
+        [UnitofWork]
         [Route("UpdateUser")]
+        [Logger(IsRequestLoggable = false)]
         public ActionResult UpdateUser([FromBody] UserUpdateRequest userUpdate)
         {
             userService.UpdateUser(userUpdate);
@@ -82,7 +90,9 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="User"></param>
         /// <returns></returns>
         [HttpDelete]
+        [UnitofWork]
         [Route("DeleteUser")]
+        [Logger(IsRequestLoggable = false)]
         public ActionResult DeleteUser([FromBody] GetUserRequest getUser)
         {
             userService.DeleteUser(getUser);

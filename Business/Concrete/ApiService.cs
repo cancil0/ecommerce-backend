@@ -44,7 +44,7 @@ namespace Business.Concrete
 
         public void DeleteApi(string apiRoutePath)
         {
-            var api = apiDal.GetAsNoTracking(x => x.ApiRoute == apiRoutePath);
+            var api = apiDal.Get(x => x.ApiRoute == apiRoutePath);
 
             if (api == null)
                 throw new AppException("Api.RoutePathNotFound", ExceptionTypes.NotFound.GetValue());
@@ -54,7 +54,7 @@ namespace Business.Concrete
 
         public void UpdateApi(UpdateApiRequest updateApiRequest)
         {
-            var api = apiDal.GetAsNoTracking(x => x.ApiRoute == updateApiRequest.OldApiPath);
+            var api = apiDal.Get(x => x.ApiRoute == updateApiRequest.OldApiPath);
 
             if (api == null)
                 throw new AppException("Api.RoutePathNotFound", ExceptionTypes.NotFound.GetValue());

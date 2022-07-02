@@ -14,7 +14,10 @@ namespace Entities.Enums
         NotFound = 404,
 
         [Value("405"), Description("NotAllowed")]
-        NotAllowed = 405
+        NotAllowed = 405,
+
+        [Value("500"), Description("NotAllowed")]
+        InternalServerError = 500
 
     }
 }
