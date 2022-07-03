@@ -180,6 +180,7 @@ namespace Core.Extension
 
         public static IServiceCollection InjectServices(this IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.InjectCoreServices();
             services.InjectNotGenerics();
             services.InjectMiddlewares();

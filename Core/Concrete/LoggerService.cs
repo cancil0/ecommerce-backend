@@ -7,6 +7,7 @@ using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Http;
 using NLog;
 using NLog.Targets;
+using System.Reflection;
 
 namespace Core.Concrete
 {
@@ -70,15 +71,14 @@ namespace Core.Concrete
 
         public void LogToApiCallLog(HttpContext context, string request, string response)
         {
-            var loggerController = context.GetEndpoint().Metadata.GetMetadata<LoggerAttribute>();
-
+            var controller = ApplicationBuilder.GetController(context);
+            var loggerController = controller.MethodInfo.GetCustomAttribute<LoggerAttribute>();
             if (loggerController != null)
             {
                 var isRequestLoggable = loggerController.IsRequestLoggable;
                 var isResponseLoggable = loggerController.IsResponseLoggable;
                 var correlationId = context.Items["CorrelationId"].ToString();
-                var apiId = Guid.ParseExact(correlationId, "N");
-
+                var apiId = new Guid(correlationId);
                 dbContext.Set<ApiLog>().Add(new ApiLog()
                 {
                     ApiLogId = apiId,
@@ -93,7 +93,6 @@ namespace Core.Concrete
                     CreatedDate = DateTime.Now.DateToInt(),
                     CreatedTime = DateTime.Now.TimeToInt(),
                 });
-
                 dbContext.SaveChanges();
             }
         }

@@ -20,7 +20,6 @@ builder.Services.AddControllers()
 builder.Services.AddFluentValidation(x => 
 {
     x.RegisterValidatorsFromAssemblyContaining<UserValidator>();
-    x.ValidatorOptions.CascadeMode = FluentValidation.CascadeMode.Stop;
 });
 
 builder.Services.AddEndpointsApiExplorer();

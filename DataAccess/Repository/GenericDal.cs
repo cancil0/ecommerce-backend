@@ -16,9 +16,9 @@ namespace DataAccess.Repository
             dbSet = context.Set<T>();
         }
 
-        public T GetById(Guid id)
+        public T GetById(params object[] keyValues)
         {
-            return dbSet.Find(id);
+            return dbSet.Find(keyValues);
         }
         public async Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
@@ -125,18 +125,18 @@ namespace DataAccess.Repository
         {
             dbSet.Add(item);
         }
-        public void InsertAsync(T item, CancellationToken cancellationToken = default)
+        public async void InsertAsync(T item, CancellationToken cancellationToken = default)
         {
-            dbSet.AddAsync(item, cancellationToken);
+            await dbSet.AddAsync(item, cancellationToken);
         }
 
         public void InsertBulk(List<T> item)
         {
             dbSet.AddRange(item);
         }
-        public void InsertBulkAsync(IEnumerable<T> item, CancellationToken cancellationToken = default)
+        public async void InsertBulkAsync(IEnumerable<T> item, CancellationToken cancellationToken = default)
         {
-            dbSet.AddRangeAsync(item, cancellationToken);
+            await dbSet.AddRangeAsync(item, cancellationToken);
         }
 
         public void Update(T item)

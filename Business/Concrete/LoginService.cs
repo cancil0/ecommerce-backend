@@ -42,7 +42,7 @@ namespace Business.Concrete
             var user = userDal.GetAsync(predicate, x => x.Include(x => x.UserRoles)
                                                             .ThenInclude(x => x.Role), false, cancellationToken);
 
-            if (user == null)
+            if (user.Result == null)
                 throw new AppException("User.NotFound", ExceptionTypes.NotFound.GetValue());
 
             if (user.Result.Password != loginRequest.Password)

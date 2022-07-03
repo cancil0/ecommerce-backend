@@ -6,7 +6,11 @@ using Entities.Enums;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 
 namespace Core.Extension
@@ -46,7 +50,11 @@ namespace Core.Extension
 
         public static IApplicationBuilder ConfigureException(this IApplicationBuilder app)
         {
-            app.UseExceptionHandler(new ExceptionHandlerOptions() { ExceptionHandler = CustomException, AllowStatusCode404Response = true });
+            app.UseExceptionHandler(new ExceptionHandlerOptions() 
+            { 
+                ExceptionHandler = CustomException, 
+                AllowStatusCode404Response = true 
+            });
 
             return app;
         }
@@ -90,6 +98,26 @@ namespace Core.Extension
 
                 await context.Response.WriteAsync(response);
             }
+        }
+
+        public static ControllerActionDescriptor GetController(HttpContext httpContext)
+        {
+            var pathElements = httpContext.Request.Path.ToString().Split("/").Where(m => m != "");
+            string controllerName = (pathElements.ElementAtOrDefault(0) == "" ? null : pathElements.ElementAtOrDefault(1));
+            string actionName = (pathElements.ElementAtOrDefault(1) == "" ? null : pathElements.ElementAtOrDefault(2));
+
+            var actionDescriptorsProvider = httpContext.RequestServices.GetRequiredService<IActionDescriptorCollectionProvider>();
+            ControllerActionDescriptor controller = actionDescriptorsProvider.ActionDescriptors.Items
+            .Where(s => s is ControllerActionDescriptor bb
+                        && bb.ActionName == actionName
+                        && bb.ControllerName == controllerName
+                        && (bb.ActionConstraints == null
+                            || (bb.ActionConstraints != null
+                                && bb.ActionConstraints.Any(x => x is HttpMethodActionConstraint cc
+                                && cc.HttpMethods.Any(m => m.ToLower() == httpContext.Request.Method.ToLower())))))
+            .Select(s => s as ControllerActionDescriptor)
+            .FirstOrDefault();
+            return controller;
         }
     }
 }

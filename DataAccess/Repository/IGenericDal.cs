@@ -13,7 +13,7 @@ namespace DataAccess.Repository
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             bool disableTracking = false, CancellationToken cancellationToken = default);
 
-        T GetById(Guid id);
+        T GetById(params object[] keyValues);
         Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
         //Get as List

@@ -63,8 +63,8 @@ namespace Core.Concrete
             string fileName = GetResourceFileName();
             if (!cache.TryGetValue(fileName, out Dictionary<string, object> resources))
             {
-                string baseDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
-                using StreamReader reader = new(string.Format("{0}\\Core\\Resources\\{1}", baseDirectory, fileName));
+                string baseDirectory = Directory.GetCurrentDirectory();
+                using StreamReader reader = new(string.Format("{0}\\Resources\\{1}", baseDirectory, fileName));
                 string json = reader.ReadToEnd();
                 resources = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
                 cache.Set(fileName, resources);
