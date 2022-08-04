@@ -48,7 +48,7 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <returns></returns>
         [HttpPost]
         [Route("GetUserAllInfo")]
-        [Logger(IsResponseLoggable = false)]
+        [Logger(IsResponseLoggable = true)]
         public ActionResult<GetUserResponse> GetUserAllInfo([FromBody] GetUserRequest getUser)
         {
             return Ok(userService.GetUserAllInfo(getUser));

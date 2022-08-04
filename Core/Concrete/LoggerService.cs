@@ -3,8 +3,11 @@ using Core.Attributes;
 using Core.Extension;
 using Core.IoC;
 using Entities.Concrete;
+using Entities.EntityAttributes;
 using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NLog;
 using NLog.Targets;
 using System.Reflection;
@@ -73,6 +76,7 @@ namespace Core.Concrete
         {
             var controller = ApplicationBuilder.GetController(context);
             var loggerController = controller.MethodInfo.GetCustomAttribute<LoggerAttribute>();
+            var controllerReturnType = controller.MethodInfo.ReturnType;
             if (loggerController != null)
             {
                 var isRequestLoggable = loggerController.IsRequestLoggable;
@@ -83,7 +87,7 @@ namespace Core.Concrete
                 {
                     ApiLogId = apiId,
                     Request = isRequestLoggable ? request : null,
-                    Response = isResponseLoggable ? response : null,
+                    Response = isResponseLoggable ? HidePropertyInLog(response, controllerReturnType) : null,
                     StatusCode = context.Response.StatusCode,
                     ServiceName = context.Request.Path.Value.Split("/")[3],
                     RouteUrl = context.Request.Path,
@@ -96,5 +100,30 @@ namespace Core.Concrete
                 dbContext.SaveChanges();
             }
         }
+
+        private static string HidePropertyInLog(string response, Type responseType)
+        {
+            var properties = responseType.GetProperties().LastOrDefault()?.PropertyType.GetProperties();
+            if(!properties.Any())
+            {
+                return response;
+            }
+            var jsonResponse = JObject.Parse(response);
+            JToken jToken = jsonResponse.GetValue("Data");
+            var res = new JObject();
+
+            foreach (var property in properties)
+            {
+                if (property.GetCustomAttribute<NotLoggablePropertyAttribute>() != null)
+                {
+                    res.Add(property.Name, "******");
+                }
+                else
+                {
+                    res.Add(property.Name, jToken[property.Name]);
+                }
+            }
+            return res.ToString(Formatting.None);
+        } 
     }
 }
