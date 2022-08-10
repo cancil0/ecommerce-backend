@@ -1,4 +1,5 @@
-﻿using Core.Abstract;
+﻿using Autofac;
+using Core.Abstract;
 using Core.ExceptionHandler;
 using Core.IoC;
 using Core.Middleware;
@@ -42,7 +43,7 @@ namespace Core.Extension
             app.UseMiddleware<Localization>();
             app.UseMiddleware<Response>();
             app.ConfigureException();
-            app.UseMiddleware<Authentication>();
+            //app.UseMiddleware<Authentication>();
             app.UseMiddleware<DbContextHandler>();
 
             return app;
@@ -74,6 +75,12 @@ namespace Core.Extension
                             break;
                         }
                     case DbUpdateException exception:
+                        {
+                            loggerService.LogError(exception.InnerException.Message);
+                            context.Response.StatusCode = ExceptionTypes.InternalServerError.GetValue().ToInt();
+                            break;
+                        }
+                    case Exception exception:
                         {
                             loggerService.LogError(exception.InnerException.Message);
                             context.Response.StatusCode = ExceptionTypes.InternalServerError.GetValue().ToInt();

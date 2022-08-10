@@ -12,7 +12,6 @@ namespace Infrastructure.Configuration
             builder.ToTable("cart_product", "entity");
             builder.HasComment("Holds cart's products");
             builder.HasKey(x => new { x.CartId, x.ProductId });
-            builder.HasQueryFilter(x => !x.Cart.User.IsDeleted);
             #endregion
 
             #region Relations

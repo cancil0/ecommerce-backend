@@ -2,11 +2,13 @@
 using Core.Abstract;
 using Core.Concrete;
 using Core.ExceptionHandler;
+using Core.IoC;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto.RequestDto.LoginRequestDto;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Entities.Enums;
+using Infrastructure.Concrete;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,8 +20,7 @@ namespace Business.Concrete
         private readonly IUserDal userDal;
         private readonly ITokenService tokenService;
 
-        public LoginService(IUserDal userDal,
-                            ITokenService tokenService)
+        public LoginService(IUserDal userDal, ITokenService tokenService)
         {
             this.userDal = userDal;
             this.tokenService = tokenService;
@@ -40,8 +41,9 @@ namespace Business.Concrete
                 .Or(x => x.MobileNo == loginRequest.MobileNo);
 
             var user = userDal.GetAsync(predicate, x => x.Include(x => x.UserRoles)
-                                                            .ThenInclude(x => x.Role), false, cancellationToken);
+                                                            .ThenInclude(x => x.Role), true, cancellationToken);
 
+            var cc = Provider.Resolve<Context>();
             if (user.Result == null)
                 throw new AppException("User.NotFound", ExceptionTypes.NotFound.GetValue());
 

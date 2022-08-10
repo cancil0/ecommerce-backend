@@ -1,7 +1,6 @@
 ﻿using Core.Abstract;
 using Core.Attributes;
 using Core.Extension;
-using Core.IoC;
 using Entities.Concrete;
 using Entities.EntityAttributes;
 using Infrastructure.Concrete;
@@ -23,12 +22,14 @@ namespace Core.Concrete
          */
 
         private readonly ILocalizerService localizerService;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ILogger logger;
         private readonly Context dbContext;
 
-        public LoggerService(ILocalizerService localizerService, Context dbContext)
+        public LoggerService(ILocalizerService localizerService, IHttpContextAccessor httpContextAccessor, Context dbContext)
         {
             this.localizerService = localizerService;
+            this.httpContextAccessor = httpContextAccessor;
             this.dbContext = dbContext;
             logger = LogManager.GetCurrentClassLogger();
         }
@@ -41,7 +42,7 @@ namespace Core.Concrete
 
         public void Logger(object requestData, object responseData)
         {
-            var context = Provider.Resolve<IHttpContextAccessor>().HttpContext;
+            var context = httpContextAccessor.HttpContext;
             DatabaseTarget target = new()
             {
                 Name = "DatabaseLogger",
@@ -97,19 +98,24 @@ namespace Core.Concrete
                     CreatedDate = DateTime.Now.DateToInt(),
                     CreatedTime = DateTime.Now.TimeToInt(),
                 });
-                dbContext.SaveChanges();
+                dbContext.SaveChanges(true);
             }
         }
 
         private static string HidePropertyInLog(string response, Type responseType)
         {
             var properties = responseType.GetProperties().LastOrDefault()?.PropertyType.GetProperties();
-            if(!properties.Any())
+            if(properties == null || !properties.Any())
             {
                 return response;
             }
             var jsonResponse = JObject.Parse(response);
             JToken jToken = jsonResponse.GetValue("Data");
+
+            if (jToken == null)
+            {
+                return response;
+            }
             var res = new JObject();
 
             foreach (var property in properties)

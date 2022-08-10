@@ -16,7 +16,10 @@
     "AccessTokenExpiration": 30,
     "Secret": "asud7eju39vkflphpoycfcs947as..215!!jhsnzzxsfcvfdghsadmcoiasdlkbmfdb45"
   },
-  "EnableSensitiveDataLogging": "true",
+  "Context": {
+    "EnableSensitiveDataLogging": "true",
+    "EnableServiceProviderCaching": "true"
+  },
   "Exceptions": {
     "ThrowException": {
       "NotFoundResourceKey": "false"

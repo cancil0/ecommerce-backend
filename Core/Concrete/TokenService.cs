@@ -14,7 +14,7 @@ namespace Core.Concrete
         public async Task<string> GenerateToken(User user, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var key = Encoding.UTF8.GetBytes(Provider.Configuration["JwtSettings:Secret"]);
+            var key = Encoding.UTF8.GetBytes(Provider.Configuration.GetValue<string>("JwtSettings:Secret"));
             var secret = new SymmetricSecurityKey(key);
             SigningCredentials signingCredentials = new(secret, SecurityAlgorithms.HmacSha256);
 
@@ -31,7 +31,7 @@ namespace Core.Concrete
                 claims.Add(new Claim("roles", userRole.Role.RoleName));
             }
 
-            var expires = Provider.Configuration["JwtSettings:AccessTokenExpiration"].ToInt();
+            var expires = Provider.Configuration.GetValue<int>("JwtSettings:AccessTokenExpiration");
 
             var tokenOptions = new JwtSecurityToken(
                 claims: claims,
@@ -44,7 +44,7 @@ namespace Core.Concrete
         public async Task<bool> IsTokenValid(string token, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var key = Provider.Configuration["JwtSettings:Secret"];
+            var key = Provider.Configuration.GetValue<string>("JwtSettings:Secret");
             var mySecret = Encoding.UTF8.GetBytes(key);
             var mySecurityKey = new SymmetricSecurityKey(mySecret);
             var tokenHandler = new JwtSecurityTokenHandler();

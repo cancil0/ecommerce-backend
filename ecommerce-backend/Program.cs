@@ -5,11 +5,11 @@ using Business.Validation.EntityValidator;
 using Core.Extension;
 using FluentValidation.AspNetCore;
 using Newtonsoft.Json.Serialization;
-using NLog;
 using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
-LogManager.LoadConfiguration(string.Format("{0}{1}", Directory.GetCurrentDirectory(), "/nlog.config"));
+builder.Configuration.AddConfiguration(Core.Extension.ServiceCollection.SetConfigurationFile());
+Core.Extension.ServiceCollection.SetLogManagerConfig();
 builder.Logging.ClearProviders();
 builder.Host.UseNLog();
 
@@ -29,8 +29,10 @@ builder.Services.AddDbContext(builder.Configuration);
 builder.Services.GetConfiguration(builder.Configuration);
 builder.Services.InjectServices();
 builder.Services.AddAutofacContainer();
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(x => x.RegisterModule(new AutofacBusinessModule()));
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory()).ConfigureContainer<ContainerBuilder>(x =>
+{
+    x.RegisterModule(new AutofacBusinessModule());
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

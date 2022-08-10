@@ -17,10 +17,12 @@ namespace Core.Middleware
     public class Authentication : IMiddleware
     {
         private readonly IMemoryCache cache;
+        private readonly Context context;
 
-        public Authentication(IMemoryCache cache)
+        public Authentication(IMemoryCache cache, Context context)
         {
             this.cache = cache;
+            this.context = context;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -109,8 +111,7 @@ namespace Core.Middleware
                 return apiRoles;
             }
             apiRoles = new();
-            var dbContext = Provider.Resolve<Context>();
-            var allApiRoles = dbContext.Set<ApiRole>()
+            var allApiRoles = context.Set<ApiRole>()
                                     .AsNoTracking()
                                     .Include(x => x.Api)
                                     .Include(x => x.Role)

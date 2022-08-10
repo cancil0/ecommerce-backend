@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog;
 using NLog.Extensions.Logging;
 using System.Reflection;
 using System.Text;
@@ -79,25 +80,66 @@ namespace Core.Extension
         public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             ContextConfiguration.ConnectionString = configuration.GetConnectionString("Connection");
-            NLog.LogManager.Configuration.Variables["ConnectionString"] = ContextConfiguration.ConnectionString;
+            LogManager.Configuration.Variables["ConnectionString"] = ContextConfiguration.ConnectionString;
 
-            LoggerFactory LoggerFactory = new(new[] { new NLogLoggerProvider() });
+            LoggerFactory LoggerFactory = new();
+            LoggerFactory.AddProvider(new NLogLoggerProvider());
+            LoggerFactory.CreateLogger<Context>();
             services.AddDbContext<Context>(optionsBuilder =>
             {
                 optionsBuilder
                     .UseLoggerFactory(LoggerFactory)
                     .UseNpgsql(ContextConfiguration.ConnectionString, o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
                     .UseMemoryCache(Provider.Resolve<IMemoryCache>())
-                    .EnableSensitiveDataLogging(configuration.GetBoolValue("EnableSensitiveDataLogging"))
-                    .EnableDetailedErrors();
+                    .EnableSensitiveDataLogging(configuration.GetValue<bool>("Context:EnableSensitiveDataLogging"))
+                    .EnableServiceProviderCaching(configuration.GetValue<bool>("Context:EnableServiceProviderCaching"))
+                    .ConfigureLoggingCacheTime(TimeSpan.FromSeconds(10));
             });
 
             return services;
         }
 
-        public static bool GetBoolValue(this IConfiguration configuration, string key)
+        public static T GetValue<T>(this IConfiguration configuration, string key)
         {
-            return configuration[key].ToBoolean();
+            if (typeof(T) == typeof(bool))
+            {
+                return (T)(object)configuration[key].ToBoolean();
+            }
+            else if(typeof(T) == typeof(string))
+            {
+                return (T)(object)configuration[key];
+            }
+            else if (typeof(T) == typeof(int))
+            {
+                return (T)(object)configuration[key].ToInt();
+            }
+
+            return (T)(object)string.Empty;
+        }
+
+        public static void SetLogManagerConfig()
+        {
+            var path = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), "Configs", GetEnvironment(), "nlog.config");
+            LogManager.LoadConfiguration(path);
+        }
+
+        public static IConfiguration SetConfigurationFile()
+        {
+            var configPath = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), "Configs", GetEnvironment());
+            var config = new ConfigurationBuilder()
+                 .SetBasePath(configPath)
+                 .AddJsonFile("environment.json", false)
+                 .Build();
+            return config;
+        }
+
+        private static string GetEnvironment()
+        {
+#if DEBUG
+            return "Development";
+#else
+            return "Production";
+#endif
         }
 
         public static IServiceCollection GetConfiguration(this IServiceCollection services, IConfiguration configuration)
@@ -181,11 +223,11 @@ namespace Core.Extension
         public static IServiceCollection InjectServices(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.InjectCoreServices();
+            //services.InjectCoreServices();
             services.InjectNotGenerics();
             services.InjectMiddlewares();
-            services.InjectBusinessServices();
-            services.InjectDataAccessServices();
+            //services.InjectBusinessServices();
+            //services.InjectDataAccessServices();
             return services;
         }
     }

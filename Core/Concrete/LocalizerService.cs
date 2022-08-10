@@ -24,7 +24,7 @@ namespace Core.Concrete
         }
         public string GetResource(string key, params string[] args)
         {
-            var isThrowException = Provider.Configuration.GetBoolValue("Exceptions:ThrowException:NotFoundResourceKey");
+            var isThrowException = Provider.Configuration.GetValue<bool>("Exceptions:ThrowException:NotFoundResourceKey");
 
             if (string.IsNullOrEmpty(key))
             {

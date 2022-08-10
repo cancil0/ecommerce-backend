@@ -2,6 +2,7 @@
 using Core.Attributes;
 using Core.Extension;
 using Infrastructure.Concrete;
+using LinqKit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,17 +55,28 @@ namespace Core.Middleware
                     }
                     else if (entry.State == EntityState.Deleted && entry.Properties.Any(x => x.Metadata.Name == "IsDeleted"))
                     {
-                        entry.State = EntityState.Modified;
+                        if(entry.Property("IsDeleted").CurrentValue != null)
+                        {
+                            entry.State = EntityState.Modified;
+                            entry.Property("IsDeleted").CurrentValue = true;
+                        }
+                        
                         entry.Property("UpdatedDate").CurrentValue = DateTime.Now.DateToInt();
                         entry.Property("UpdatedTime").CurrentValue = DateTime.Now.TimeToInt();
-                        entry.Property("IsDeleted").CurrentValue = true;
                         entry.Property("UpdatedBy").CurrentValue = userName;
                     }
 
                 }
-
-                await dbContext.SaveChangesAsync();
-                await dbContext.Database.CommitTransactionAsync();
+                try
+                {
+                    await dbContext.SaveChangesAsync();
+                    await dbContext.Database.CommitTransactionAsync();
+                }
+                catch (DbUpdateException exception)
+                {
+                    dbContext.ChangeTracker.Entries().ForEach(x => x.State = EntityState.Unchanged);
+                    throw exception;
+                }
             }
             
         }

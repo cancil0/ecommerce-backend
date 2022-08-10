@@ -1,4 +1,5 @@
 ﻿using Entities.Abstract;
+using Entities.EntityAttributes;
 using System.Text.Json.Serialization;
 
 namespace Entities.Concrete
@@ -20,6 +21,7 @@ namespace Entities.Concrete
         public string UserName { get; set; }
 
         [JsonIgnore]
+        [NotLoggableProperty]
         public string Password { get; set; }
 
         public int BirthDate { get; set; }

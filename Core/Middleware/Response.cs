@@ -85,7 +85,7 @@ namespace Core.Middleware
                 }
                 else
                 {
-                    response = originalBody;
+                    response = string.IsNullOrEmpty(originalBody) ? null : originalBody;
                 }
             }
 

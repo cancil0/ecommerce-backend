@@ -12,7 +12,6 @@ namespace Infrastructure.Configuration
             builder.ToTable("carousel", "entity");
             builder.HasComment("Holds Home Page's carousel");
             builder.HasKey(x => x.CarouselId);
-            builder.HasQueryFilter(x => !x.IsDeleted);
             #endregion
 
             #region Relations

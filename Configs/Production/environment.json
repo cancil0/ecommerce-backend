@@ -1,0 +1,28 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Error",
+      "Microsoft.AspNetCore": "Warning",
+      "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "Connection": "User ID=postgres;Password=123456;Server=localhost;Port=5432;Database=ECommerce;Integrated Security=true;Pooling=true;Include Error Detail=true"
+  },
+  "AllowedHosts": "*",
+  "JwtSettings": {
+    "Audience": "http://localhost:5002",
+    "Issuer": "http://localhost:5002",
+    "AccessTokenExpiration": 30,
+    "Secret": "asud7eju39vkflphpoycfcs947as..215!!jhsnzzxsfcvfdghsadmcoiasdlkbmfdb45"
+  },
+  "Context": {
+    "EnableSensitiveDataLogging": "false",
+    "EnableServiceProviderCaching": "true"
+  },
+  "Exceptions": {
+    "ThrowException": {
+      "NotFoundResourceKey": "false"
+    }
+  }
+}
