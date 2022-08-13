@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -23,6 +24,8 @@ namespace Business.Concrete
             this.userDal = userDal;
             this.roleDal = roleDal;
         }
+
+        [UnitofWork]
         public void AddUserRole(AddUserRoleRequest userRoleRequest)
         {
             var user = userDal.GetById(userRoleRequest.UserId);
@@ -44,6 +47,7 @@ namespace Business.Concrete
             userRoleDal.Insert(userRole);
         }
 
+        [UnitofWork]
         public void DeleteUserRole(AddUserRoleRequest userRoleRequest)
         {
             var userRole = userRoleDal.Get(x => x.RoleId == userRoleRequest.RoleId && x.UserId == userRoleRequest.UserId);

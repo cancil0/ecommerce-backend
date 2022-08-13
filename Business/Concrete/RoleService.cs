@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -16,6 +17,8 @@ namespace Business.Concrete
         {
             this.roleDal = roleDal;
         }
+
+        [UnitofWork]
         public void AddRole(string roleName)
         {
             if (string.IsNullOrEmpty(roleName))
@@ -47,6 +50,7 @@ namespace Business.Concrete
             return result;
         }
 
+        [UnitofWork]
         public void DeleteRole(string roleName)
         {
             var role = roleDal.Get(x => x.RoleName == roleName);
@@ -57,6 +61,7 @@ namespace Business.Concrete
             roleDal.Delete(role);
         }
 
+        [UnitofWork]
         public void UpdateRole(UpdateRoleRequest updateRoleRequest)
         {
             var role = roleDal.Get(x => x.RoleName == updateRoleRequest.OldRoleName);

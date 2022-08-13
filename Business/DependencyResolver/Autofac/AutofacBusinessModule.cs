@@ -1,8 +1,9 @@
 ﻿using Autofac;
+using Autofac.Extras.DynamicProxy;
+using Business.DependencyResolver.Interceptors;
 using Business.Mapping;
 using Core.Abstract;
 using Core.Concrete;
-using Core.IoC;
 using Core.Middleware;
 using DataAccess.Repository;
 using Infrastructure.Concrete;
@@ -64,10 +65,15 @@ namespace Business.DependencyResolver.Autofac
                 .As<ITokenService>()
                 .InstancePerLifetimeScope();
 
+            builder.Register(x => new UnitOfWorkInterceptor(x.Resolve<Context>(), x.Resolve<IHttpContextAccessor>()))
+                .InstancePerLifetimeScope();
+
             builder.RegisterAssemblyTypes(System.Reflection.Assembly.Load("Business"))
-                    .AsClosedTypesOf(typeof(IBaseService<>))
-                    .AsImplementedInterfaces()
-                    .InstancePerLifetimeScope();
+                .AsClosedInterfacesOf(typeof(IBaseService<>))
+                .AsImplementedInterfaces()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(UnitOfWorkInterceptor))
+                .InstancePerLifetimeScope();
 
             builder.RegisterAssemblyTypes(System.Reflection.Assembly.Load("DataAccess"))
                     .AsClosedTypesOf(typeof(IGenericDal<>))

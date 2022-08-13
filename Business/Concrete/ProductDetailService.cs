@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -29,6 +30,7 @@ namespace Business.Concrete
             this.mapper = mapper;
         }
 
+        [UnitofWork]
         public void AddProductDetail(AddProductDetailRequest addProductDetail)
         {
             var productDetail = mapper.Map<ProductDetail>(addProductDetail);
@@ -71,6 +73,7 @@ namespace Business.Concrete
 
         }
 
+        [UnitofWork]
         public void UpdateProductDetail(UpdateProductDetailRequest updateProductDetail)
         {
             var predicate = PredicateBuilder.New<ProductDetail>()
@@ -84,6 +87,7 @@ namespace Business.Concrete
             productDetailDal.Update(productDetail);
         }
 
+        [UnitofWork]
         public void UpdateClickedCount(UpdateProductDetailClickCountRequest updateProductDetail)
         {
             var productDetail = productDetailDal.GetById(updateProductDetail.ProductDetailId);
@@ -91,6 +95,7 @@ namespace Business.Concrete
             productDetailDal.Update(productDetail);
         }
 
+        [UnitofWork]
         public void UpdatePurchasedCount(UpdateProductDetailPurchaseCountRequest updateProductDetail)
         {
             var productDetail = productDetailDal.GetById(updateProductDetail.ProductDetailId);

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -69,6 +70,7 @@ namespace Business.Concrete
             return categoryResponse;
         }
 
+        [UnitofWork]
         public void AddCategory(AddCategoryRequest addCategory)
         {
             CategoryValidation(new CategoryValidationRequest()
@@ -82,6 +84,7 @@ namespace Business.Concrete
             cache.Remove(CacheTypes.CategoryResponse.GetValue());
         }
 
+        [UnitofWork]
         public void DeleteCategory(DeleteCategoryRequest deleteCategory)
         {
             if (deleteCategory.CategoryId is null && string.IsNullOrEmpty(deleteCategory.CategoryName))
@@ -99,6 +102,7 @@ namespace Business.Concrete
             cache.Remove(CacheTypes.CategoryResponse.GetValue());
         }
 
+        [UnitofWork]
         public void UpdateCategory(UpdateCategoryRequest updateCategory)
         {
             CategoryValidation(new CategoryValidationRequest()

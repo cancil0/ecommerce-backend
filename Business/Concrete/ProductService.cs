@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -26,6 +27,7 @@ namespace Business.Concrete
             this.mapper = mapper;
         }
 
+        [UnitofWork]
         public void AddProduct(AddProductRequest addProduct)
         {
             var category = categoryDal.Get(x=> x.CategoryId == addProduct.CategoryId);
@@ -55,6 +57,7 @@ namespace Business.Concrete
             productDal.Insert(product);
         }
 
+        [UnitofWork]
         public void DeleteProduct(DeleteProductRequest deleteProduct)
         {
             var product = productDal.Get(x => x.ProductId == deleteProduct.ProductId || x.Name == deleteProduct.Name);
@@ -106,6 +109,7 @@ namespace Business.Concrete
             return response;
         }
 
+        [UnitofWork]
         public void UpdateProduct(UpdateProductRequest updateProduct)
         {
             var product = productDal.GetById(updateProduct.ProductId);

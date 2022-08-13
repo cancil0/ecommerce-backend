@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -16,6 +17,8 @@ namespace Business.Concrete
         {
             this.apiDal = apiDal;
         }
+
+        [UnitofWork]
         public void AddApi(string apiRoutePath)
         {
             if (string.IsNullOrEmpty(apiRoutePath) && apiRoutePath.Split("/").Length != 4)
@@ -42,6 +45,7 @@ namespace Business.Concrete
             return result; 
         }
 
+        [UnitofWork]
         public void DeleteApi(string apiRoutePath)
         {
             var api = apiDal.Get(x => x.ApiRoute == apiRoutePath);
@@ -52,6 +56,7 @@ namespace Business.Concrete
             apiDal.Delete(api);
         }
 
+        [UnitofWork]
         public void UpdateApi(UpdateApiRequest updateApiRequest)
         {
             var api = apiDal.Get(x => x.ApiRoute == updateApiRequest.OldApiPath);

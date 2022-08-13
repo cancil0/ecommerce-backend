@@ -48,7 +48,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="addCarousel"></param>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("AddCarousel")]
         public ActionResult AddCarousel([FromBody] AddCarouselRequest addCarousel)
         {
@@ -62,7 +61,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="carouselUpdate"></param>
         /// <returns></returns>
         [HttpPut]
-        [UnitofWork]
         [Route("UpdateCarousel")]
         public ActionResult UpdateCarousel([FromBody] Carousel carouselUpdate)
         {
@@ -76,7 +74,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="carouselId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [UnitofWork]
         [Route("DeleteCarousel")]
         public ActionResult DeleteCarousel([FromQuery] Guid carouselId)
         {

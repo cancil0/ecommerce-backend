@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -25,6 +26,7 @@ namespace Business.Concrete
             this.productDal = productDal;
         }
 
+        [UnitofWork]
         public void AddProductToCart(AddProductToCartRequest addProduct)
         {
             var product = productDal.GetById(addProduct.ProductId);
@@ -42,6 +44,7 @@ namespace Business.Concrete
             cartProductDal.Insert(cartProduct);
         }
 
+        [UnitofWork]
         public void RemoveProductFromCart(RemoveProductFromCartRequest removeProduct)
         {
             var product = productDal.GetById(removeProduct.ProductId);
@@ -56,6 +59,7 @@ namespace Business.Concrete
             cartProductDal.Delete(cartProduct);
         }
 
+        [UnitofWork]
         public void RemoveAllProductsFromCart(Guid cartId)
         {
             var cartProduct = cartProductDal.GetMany(x =>  x.CartId == cartId);

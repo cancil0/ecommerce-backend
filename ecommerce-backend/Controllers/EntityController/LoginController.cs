@@ -36,7 +36,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("ForgotMyPassword")]
         public ActionResult ForgotMyPassword([FromBody] GetUserRequest userRequest)
         {

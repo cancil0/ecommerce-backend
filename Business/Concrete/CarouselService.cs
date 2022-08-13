@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -37,17 +38,20 @@ namespace Business.Concrete
             return carouselDal.GetAll().OrderBy(x => x.ImageOrder).ToList();
         }
 
+        [UnitofWork]
         public void AddCarousel(AddCarouselRequest carouselRequest)
         {
             var carousel = mapper.Map<Carousel>(carouselRequest);
             carouselDal.Insert(carousel);
         }
 
+        [UnitofWork]
         public void UpdateCarousel(Carousel carousel)
         {
             carouselDal.Update(carousel);
         }
 
+        [UnitofWork]
         public void DeleteCarousel(Guid carouselId)
         {
             var carousel = carouselDal.GetById(carouselId);

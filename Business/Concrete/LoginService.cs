@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Core.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using Core.IoC;
@@ -26,6 +27,7 @@ namespace Business.Concrete
             this.tokenService = tokenService;
         }
 
+        [UnitofWork]
         public void ForgotMyPassword(GetUserRequest getUserRequest)
         {
             var user = userDal.Get(getUserRequest);

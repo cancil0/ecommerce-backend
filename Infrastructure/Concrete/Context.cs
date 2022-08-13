@@ -15,12 +15,6 @@ namespace Infrastructure.Concrete
             modelBuilder.ApplyGlobalFilters<IDeleteEntity>(x => !x.IsDeleted);
         }
     }
-
-    public static class ContextConfiguration
-    {
-        public static string ConnectionString { get; set; }
-    }
-
     public static class ModelBuilderExtension
     {
         public static void ApplyGlobalFilters<TInterface>(this ModelBuilder modelBuilder, Expression<Func<TInterface, bool>> expression)

@@ -37,7 +37,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="addProduct"></param>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("AddProductToCart")]
         public ActionResult AddProductToCart([FromBody] AddProductToCartRequest addProduct)
         {
@@ -51,7 +50,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="removeProduct"></param>
         /// <returns></returns>
         [HttpDelete]
-        [UnitofWork]
         [Route("RemoveProductFromCart")]
         public ActionResult RemoveProductFromCart([FromBody] RemoveProductFromCartRequest removeProduct)
         {
@@ -65,7 +63,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="cartId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [UnitofWork]
         [Route("RemoveAllProductsFromCart")]
         public ActionResult RemoveAllProductsFromCart([FromQuery] Guid cartId)
         {

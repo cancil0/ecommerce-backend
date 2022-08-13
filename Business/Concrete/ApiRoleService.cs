@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -26,6 +27,8 @@ namespace Business.Concrete
             this.roleDal = roleDal;
             this.cache = cache;
         }
+
+        [UnitofWork]
         public void AddApiRole(ApiRoleRequest apiRoleRequest)
         {
             var api = apiDal.GetById(apiRoleRequest.ApiId);
@@ -49,6 +52,7 @@ namespace Business.Concrete
             cache.Remove(CacheTypes.ApiRoleCache.GetValue());
         }
 
+        [UnitofWork]
         public void DeleteApiRole(ApiRoleRequest apiRoleRequest)
         {
             var apiRole = apiRoleDal.Get(x => x.RoleId == apiRoleRequest.RoleId && x.ApiId == apiRoleRequest.ApiId);

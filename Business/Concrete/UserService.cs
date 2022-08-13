@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
 using DataAccess.Abstract;
@@ -70,6 +71,7 @@ namespace Business.Concrete
             return result;
         }
 
+        [UnitofWork]
         public string CreateUser(CreateUserRequest createRequest)
         {
             var isUserExist = userDal.GetCreateUser(new GetUserRequest
@@ -126,6 +128,7 @@ namespace Business.Concrete
             return user.UserName;
         }
 
+        [UnitofWork]
         public void UpdateUser(UserUpdateRequest userUpdate)
         {
             var user = userDal.Get(x => x.UserName == userUpdate.OldUserName);
@@ -135,6 +138,7 @@ namespace Business.Concrete
             userDal.Update(user);
         }
 
+        [UnitofWork]
         public void DeleteUser(GetUserRequest getUser)
         {
             var user = userDal.Get(getUser);

@@ -9,7 +9,6 @@ namespace Core.Abstract
         void LogWarn(string key, params string[] args);
         void LogError(string key, params string[] args);
         void LogException(Exception exception, string message);
-        void Logger(object requestData, object responseData);
         void LogToApiCallLog(HttpContext context, string request, string response);
     }
 }

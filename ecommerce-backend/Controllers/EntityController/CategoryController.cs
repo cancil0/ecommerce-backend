@@ -60,7 +60,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="addCategory"></param>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("AddCategory")]
         public ActionResult AddCategory([FromBody] AddCategoryRequest addCategory)
         {
@@ -74,7 +73,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="categoryUpdate"></param>
         /// <returns></returns>
         [HttpPut]
-        [UnitofWork]
         [Route("UpdateCategory")]
         public ActionResult UpdateCategory([FromBody] UpdateCategoryRequest categoryUpdate)
         {
@@ -88,7 +86,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="deleteCategory"></param>
         /// <returns></returns>
         [HttpDelete]
-        [UnitofWork]
         [Route("DeleteCategory")]
         public ActionResult DeleteCategory([FromBody] DeleteCategoryRequest deleteCategory)
         {

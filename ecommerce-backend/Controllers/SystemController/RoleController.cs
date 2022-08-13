@@ -33,7 +33,6 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("AddRole")]
         public ActionResult AddRole([FromBody] string roleName)
         {
@@ -46,7 +45,6 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("UpdateRole")]
         public ActionResult UpdateRole([FromBody] UpdateRoleRequest updateRoleRequest)
         {
@@ -59,7 +57,6 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
-        [UnitofWork]
         [Route("DeleteRole")]
         public ActionResult DeleteRole([FromBody] string roleName)
         {

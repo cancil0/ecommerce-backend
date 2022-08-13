@@ -60,7 +60,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="User"></param>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("CreateUser")]
         [AllowAnonymous]
         [Logger(IsRequestLoggable = false)]
@@ -75,7 +74,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="User"></param>
         /// <returns></returns>
         [HttpPut]
-        [UnitofWork]
         [Route("UpdateUser")]
         [Logger(IsRequestLoggable = false)]
         public ActionResult UpdateUser([FromBody] UserUpdateRequest userUpdate)
@@ -90,7 +88,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="User"></param>
         /// <returns></returns>
         [HttpDelete]
-        [UnitofWork]
         [Route("DeleteUser")]
         [Logger(IsRequestLoggable = false)]
         public ActionResult DeleteUser([FromBody] GetUserRequest getUser)

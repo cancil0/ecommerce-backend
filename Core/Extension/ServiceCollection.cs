@@ -79,9 +79,7 @@ namespace Core.Extension
 
         public static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
         {
-            ContextConfiguration.ConnectionString = configuration.GetConnectionString("Connection");
-            LogManager.Configuration.Variables["ConnectionString"] = ContextConfiguration.ConnectionString;
-
+            var connectionString = configuration.GetConnectionString("Connection");
             LoggerFactory LoggerFactory = new();
             LoggerFactory.AddProvider(new NLogLoggerProvider());
             LoggerFactory.CreateLogger<Context>();
@@ -89,62 +87,13 @@ namespace Core.Extension
             {
                 optionsBuilder
                     .UseLoggerFactory(LoggerFactory)
-                    .UseNpgsql(ContextConfiguration.ConnectionString, o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
+                    .UseNpgsql(connectionString, o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
                     .UseMemoryCache(Provider.Resolve<IMemoryCache>())
                     .EnableSensitiveDataLogging(configuration.GetValue<bool>("Context:EnableSensitiveDataLogging"))
                     .EnableServiceProviderCaching(configuration.GetValue<bool>("Context:EnableServiceProviderCaching"))
                     .ConfigureLoggingCacheTime(TimeSpan.FromSeconds(10));
             });
 
-            return services;
-        }
-
-        public static T GetValue<T>(this IConfiguration configuration, string key)
-        {
-            if (typeof(T) == typeof(bool))
-            {
-                return (T)(object)configuration[key].ToBoolean();
-            }
-            else if(typeof(T) == typeof(string))
-            {
-                return (T)(object)configuration[key];
-            }
-            else if (typeof(T) == typeof(int))
-            {
-                return (T)(object)configuration[key].ToInt();
-            }
-
-            return (T)(object)string.Empty;
-        }
-
-        public static void SetLogManagerConfig()
-        {
-            var path = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), "Configs", GetEnvironment(), "nlog.config");
-            LogManager.LoadConfiguration(path);
-        }
-
-        public static IConfiguration SetConfigurationFile()
-        {
-            var configPath = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), "Configs", GetEnvironment());
-            var config = new ConfigurationBuilder()
-                 .SetBasePath(configPath)
-                 .AddJsonFile("environment.json", false)
-                 .Build();
-            return config;
-        }
-
-        private static string GetEnvironment()
-        {
-#if DEBUG
-            return "Development";
-#else
-            return "Production";
-#endif
-        }
-
-        public static IServiceCollection GetConfiguration(this IServiceCollection services, IConfiguration configuration)
-        {
-            Provider.Configuration = configuration;
             return services;
         }
 

@@ -37,7 +37,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="User"></param>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("AddMerchant")]
         public ActionResult AddMerchant([FromBody] AddMerchantRequest addMerchant)
         {
@@ -51,7 +50,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="updateMerchant"></param>
         /// <returns></returns>
         [HttpPut]
-        [UnitofWork]
         [Route("UpdateMerchant")]
         public ActionResult UpdateMerchant([FromBody] UpdateMerchantRequest updateMerchant)
         {
@@ -65,7 +63,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="merchantId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [UnitofWork]
         [Route("DeleteMerchant")]
         public ActionResult DeleteMerchant([FromQuery] Guid merchantId)
         {
@@ -79,7 +76,6 @@ namespace ecommerce_backend.Controllers.EntityController
         /// <param name="updateMerchant"></param>
         /// <returns></returns>
         [HttpPut]
-        [UnitofWork]
         [Route("GiveFeedbackToMerchant")]
         public ActionResult GiveFeedbackToMerchant([FromBody] GiveFeedbackToMerchantRequest giveFeedback)
         {

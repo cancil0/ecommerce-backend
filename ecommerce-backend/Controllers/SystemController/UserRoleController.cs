@@ -35,7 +35,6 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("AddUserRole")]
         [Logger(IsRequestLoggable = false)]
         public ActionResult AddUserRole([FromBody] AddUserRoleRequest addUserRole)
@@ -49,7 +48,6 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
-        [UnitofWork]
         [Route("DeleteUserRole")]
         public ActionResult DeleteUserRole([FromBody] AddUserRoleRequest addUserRole)
         {

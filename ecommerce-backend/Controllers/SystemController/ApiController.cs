@@ -33,7 +33,6 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("AddApi")]
         public ActionResult AddApi([FromBody] string apiPath)
         {
@@ -46,7 +45,6 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        [UnitofWork]
         [Route("UpdateApi")]
         public ActionResult UpdateApi([FromBody] UpdateApiRequest updateApiRequest)
         {
@@ -59,7 +57,6 @@ namespace ecommerce_backend.Controllers.SystemController
         /// </summary>
         /// <returns></returns>
         [HttpDelete]
-        [UnitofWork]
         [Route("DeleteApi")]
         public ActionResult DeleteApi([FromBody] string apiPath)
         {

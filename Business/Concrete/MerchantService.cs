@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Business.Abstract;
+using Core.Attributes;
 using Core.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -20,6 +21,7 @@ namespace Business.Concrete
             this.mapper = mapper;
         }
 
+        [UnitofWork]
         public void AddMerchant(AddMerchantRequest addMerchant)
         {
             Merchant merchant = new();
@@ -27,6 +29,7 @@ namespace Business.Concrete
             merchantDal.Insert(merchant);
         }
 
+        [UnitofWork]
         public void DeleteMerchant(Guid merchantId)
         {
             var merchant = merchantDal.GetMerchantById(merchantId);
@@ -46,6 +49,7 @@ namespace Business.Concrete
             merchantDal.Update(merchant);
         }
 
+        [UnitofWork]
         public void UpdateMerchant(UpdateMerchantRequest updateMerchant)
         {
             Merchant merchant = merchantDal.GetMerchantById(updateMerchant.MerchantId);
