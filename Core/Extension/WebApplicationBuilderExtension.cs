@@ -33,41 +33,27 @@ namespace Core.Extension
             builder.Services.IntegrateSwagger();
             builder.Services.JwtSettings(builder.Configuration);
             builder.Services.AddDbContext(builder.Configuration);
-            builder.Services.GetConfiguration(builder.Configuration);
             builder.Services.InjectServices();
             
             return builder;
         }
 
-        private static IServiceCollection GetConfiguration(this IServiceCollection services, IConfiguration configuration)
-        {
-            Provider.Configuration = configuration;
-            return services;
-        }
-
         private static void SetLogManagerConfig()
         {
-            var path = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), "Configs", GetEnvironment(), "nlog.config");
+            var environment = Environment.GetEnvironmentVariable("Environment");
+            var path = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), "Configs", environment, "nlog.config");
             LogManager.LoadConfiguration(path);
         }
 
         private static IConfiguration SetConfigurationFile()
         {
-            var configPath = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), "Configs", GetEnvironment());
+            var environment = Environment.GetEnvironmentVariable("Environment");
+            var configPath = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), "Configs", environment);
             var config = new ConfigurationBuilder()
                  .SetBasePath(configPath)
                  .AddJsonFile("environment.json", false)
                  .Build();
             return config;
-        }
-
-        private static string GetEnvironment()
-        {
-#if DEBUG
-            return "Development";
-#else
-            return "Production";
-#endif
         }
     }
 }

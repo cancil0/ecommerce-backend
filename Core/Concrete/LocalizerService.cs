@@ -1,9 +1,8 @@
 ﻿using Core.Abstract;
 using Core.ExceptionHandler;
-using Core.Extension;
-using Core.IoC;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Globalization;
 using System.Net;
@@ -13,9 +12,11 @@ namespace Core.Concrete
     public class LocalizerService : ILocalizerService
     {
         private readonly IMemoryCache cache;
-        public LocalizerService(IMemoryCache cache)
+        private readonly IConfiguration configuration;
+        public LocalizerService(IMemoryCache cache, IConfiguration configuration)
         {
             this.cache = cache;
+            this.configuration = configuration;
         }
         public bool DoesCultureExist(string cultureName)
         {
@@ -24,7 +25,7 @@ namespace Core.Concrete
         }
         public string GetResource(string key, params string[] args)
         {
-            var isThrowException = Provider.Configuration.GetValue<bool>("Exceptions:ThrowException:NotFoundResourceKey");
+            var isThrowException = configuration.GetValue<bool>("Exceptions:ThrowException:NotFoundResourceKey");
 
             if (string.IsNullOrEmpty(key))
             {
@@ -63,19 +64,13 @@ namespace Core.Concrete
             string fileName = GetResourceFileName();
             if (!cache.TryGetValue(fileName, out Dictionary<string, object> resources))
             {
-                string baseDirectory = Directory.GetCurrentDirectory();
-                using StreamReader reader = new(string.Format("{0}\\Resources\\{1}", baseDirectory, fileName));
+                var path = Path.Combine(GetResourcePath(), fileName);
+                using StreamReader reader = new(path);
                 string json = reader.ReadToEnd();
                 resources = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
                 cache.Set(fileName, resources);
             }
             return resources;
-        }
-
-        public string GetResourceFileName()
-        {
-            string cultureKey = CultureInfo.CurrentCulture.TwoLetterISOLanguageName ?? "en";
-            return string.Format("{0}.json", cultureKey.ToString());
         }
 
         public void SetLanguage(HttpContext context)
@@ -99,5 +94,20 @@ namespace Core.Concrete
 
             GetResources();
         }
+
+        #region Private Methods
+        private static string GetResourceFileName()
+        {
+            string cultureKey = CultureInfo.CurrentCulture.TwoLetterISOLanguageName ?? "en";
+            return string.Format("{0}.json", cultureKey.ToString());
+        }
+
+        private static string GetResourcePath()
+        {
+            var path = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), "Resources");
+            return path;
+        }
+
+        #endregion
     }
 }

@@ -4,7 +4,8 @@
       "Default": "Information",
       "Microsoft.AspNetCore": "Warning",
       "Microsoft.EntityFrameworkCore.Database.Command": "Information"
-    }
+    },
+    "LogToApiLogTable": "false"
   },
   "ConnectionStrings": {
     "Connection": "User ID=postgres;Password=123456;Server=localhost;Port=5432;Database=ECommerce;Integrated Security=true;Pooling=true;Include Error Detail=true"

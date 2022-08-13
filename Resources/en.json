@@ -28,7 +28,7 @@
     "RoutePathNotFound": "Api Route Path Not Found"
   },
   "Role": {
-    "NotFound": "Rol Not Found"
+    "NotFound": "Role Not Found"
   },
   "ApiRole": {
     "NotFound": "Api Role Not Found"

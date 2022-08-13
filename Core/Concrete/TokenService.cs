@@ -2,6 +2,7 @@
 using Core.Extension;
 using Core.IoC;
 using Entities.Concrete;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,10 +12,16 @@ namespace Core.Concrete
 {
     public class TokenService : ITokenService
     {
+        private readonly IConfiguration configuration;
+        public TokenService(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
         public async Task<string> GenerateToken(User user, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var key = Encoding.UTF8.GetBytes(Provider.Configuration.GetValue<string>("JwtSettings:Secret"));
+            var secretToken = configuration.GetValue<string>("JwtSettings:Secret");
+            var key = Encoding.UTF8.GetBytes(secretToken);
             var secret = new SymmetricSecurityKey(key);
             SigningCredentials signingCredentials = new(secret, SecurityAlgorithms.HmacSha256);
 
@@ -31,7 +38,7 @@ namespace Core.Concrete
                 claims.Add(new Claim("roles", userRole.Role.RoleName));
             }
 
-            var expires = Provider.Configuration.GetValue<int>("JwtSettings:AccessTokenExpiration");
+            var expires = configuration.GetValue<int>("JwtSettings:AccessTokenExpiration");
 
             var tokenOptions = new JwtSecurityToken(
                 claims: claims,
@@ -44,7 +51,7 @@ namespace Core.Concrete
         public async Task<bool> IsTokenValid(string token, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var key = Provider.Configuration.GetValue<string>("JwtSettings:Secret");
+            var key = configuration.GetValue<string>("JwtSettings:Secret");
             var mySecret = Encoding.UTF8.GetBytes(key);
             var mySecurityKey = new SymmetricSecurityKey(mySecret);
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -3,7 +3,6 @@ using Core.Abstract;
 using Core.Attributes;
 using Core.Concrete;
 using Core.ExceptionHandler;
-using Core.IoC;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.Dto.RequestDto.LoginRequestDto;
@@ -21,7 +20,7 @@ namespace Business.Concrete
         private readonly IUserDal userDal;
         private readonly ITokenService tokenService;
 
-        public LoginService(IUserDal userDal, ITokenService tokenService)
+        public LoginService(IUserDal userDal, ITokenService tokenService, Context context2)
         {
             this.userDal = userDal;
             this.tokenService = tokenService;
@@ -45,7 +44,6 @@ namespace Business.Concrete
             var user = userDal.GetAsync(predicate, x => x.Include(x => x.UserRoles)
                                                             .ThenInclude(x => x.Role), true, cancellationToken);
 
-            var cc = Provider.Resolve<Context>();
             if (user.Result == null)
                 throw new AppException("User.NotFound", ExceptionTypes.NotFound.GetValue());
 

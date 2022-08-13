@@ -1,11 +1,14 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolver.Autofac;
+using Business.Mapping;
 using Core.Extension;
+using DataAccess.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.SetBuilder();
-builder.Services.AddAutofacContainer();
+builder.Services.AddAutoMapper(typeof(AutoMapperConfig));
+builder.Services.AddScoped(typeof(IGenericDal<>), typeof(GenericDal<>));
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory()).ConfigureContainer<ContainerBuilder>(x =>
 {
     x.RegisterModule(new AutofacBusinessModule());

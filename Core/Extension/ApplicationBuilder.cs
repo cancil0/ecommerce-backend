@@ -25,7 +25,6 @@ namespace Core.Extension
 
         public static IApplicationBuilder AddCustomMiddlewares(this IApplicationBuilder app)
         {
-            app.UseMiddleware<AutofacScope>();
             app.UseMiddleware<HttpLogging>();
             app.UseMiddleware<Localization>();
             app.UseMiddleware<Response>();

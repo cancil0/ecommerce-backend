@@ -1,7 +1,7 @@
-﻿using Infrastructure.Concrete;
-using LinqKit;
+﻿using Autofac;
+using Core.IoC;
+using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 namespace Core.Middleware
 {
@@ -14,6 +14,8 @@ namespace Core.Middleware
         }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            Provider.LifetimeScope = (ILifetimeScope)context.RequestServices.GetService(typeof(ILifetimeScope));
+
             await next(context);
 
             if (dbContext.Database.CurrentTransaction != null)

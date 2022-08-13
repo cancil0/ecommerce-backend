@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -17,11 +18,13 @@ namespace Core.Middleware
     public class Authentication : IMiddleware
     {
         private readonly IMemoryCache cache;
+        private readonly IConfiguration configuration;
         private readonly Context context;
 
-        public Authentication(IMemoryCache cache, Context context)
+        public Authentication(IMemoryCache cache, IConfiguration configuration, Context context)
         {
             this.cache = cache;
+            this.configuration = configuration;
             this.context = context;
         }
 
@@ -49,7 +52,8 @@ namespace Core.Middleware
                 token = token.Split(" ").Last();
                 context.Request.Headers.Authorization = string.Format("Bearer {0}", token);
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(Provider.Configuration["JwtSettings:Secret"]);
+                var secretToken = configuration.GetValue<string>("JwtSettings:Secret");
+                var key = Encoding.ASCII.GetBytes(secretToken);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,

@@ -1,6 +1,7 @@
 ﻿using Core.Abstract;
 using Core.ExceptionHandler;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -12,9 +13,11 @@ namespace Core.Middleware
     public class Response : IMiddleware
     {
         private readonly ILoggerService loggerService;
-        public Response(ILoggerService loggerService)
+        private readonly IConfiguration configuration;
+        public Response(ILoggerService loggerService, IConfiguration configuration)
         {
             this.loggerService = loggerService;
+            this.configuration = configuration;
         }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
@@ -47,7 +50,12 @@ namespace Core.Middleware
             context.Response.ContentLength = responseBytes.Length;
             stopwatch.Stop();
             context.Items["Duration"] = stopwatch.ElapsedMilliseconds.ToString();
-            loggerService.LogToApiCallLog(context, requestData, wrappedResponse);
+
+            if(configuration.GetValue<bool>("Logging:LogToApiLogTable"))
+            {
+                loggerService.LogToApiCallLog(context, requestData, wrappedResponse);
+            }
+            
             await context.Response.Body.WriteAsync(responseBytes);
         }
 

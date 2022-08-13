@@ -21,14 +21,12 @@ namespace Core.Concrete
          */
 
         private readonly ILocalizerService localizerService;
-        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ILogger logger;
         private readonly Context dbContext;
 
-        public LoggerService(ILocalizerService localizerService, IHttpContextAccessor httpContextAccessor, Context dbContext)
+        public LoggerService(ILocalizerService localizerService, Context dbContext)
         {
             this.localizerService = localizerService;
-            this.httpContextAccessor = httpContextAccessor;
             this.dbContext = dbContext;
             logger = LogManager.GetCurrentClassLogger();
         }

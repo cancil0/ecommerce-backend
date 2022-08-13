@@ -16,24 +16,6 @@ namespace Core.Extension
 {
     public static class Extensions
     {
-        public static T GetValue<T>(this IConfiguration configuration, string key)
-        {
-            if (typeof(T) == typeof(bool))
-            {
-                return (T)(object)configuration[key].ToBoolean();
-            }
-            else if (typeof(T) == typeof(string))
-            {
-                return (T)(object)configuration[key];
-            }
-            else if (typeof(T) == typeof(int))
-            {
-                return (T)(object)configuration[key].ToInt();
-            }
-
-            return (T)(object)string.Empty;
-        }
-
         public static async Task CustomException(HttpContext context)
         {
             var contextFeature = context.Features.Get<IExceptionHandlerFeature>();

@@ -90,8 +90,7 @@ namespace Core.Extension
                     .UseNpgsql(connectionString, o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
                     .UseMemoryCache(Provider.Resolve<IMemoryCache>())
                     .EnableSensitiveDataLogging(configuration.GetValue<bool>("Context:EnableSensitiveDataLogging"))
-                    .EnableServiceProviderCaching(configuration.GetValue<bool>("Context:EnableServiceProviderCaching"))
-                    .ConfigureLoggingCacheTime(TimeSpan.FromSeconds(10));
+                    .EnableServiceProviderCaching(configuration.GetValue<bool>("Context:EnableServiceProviderCaching"));
             });
 
             return services;
@@ -99,6 +98,7 @@ namespace Core.Extension
 
         public static IServiceCollection InjectNotGenerics(this IServiceCollection services)
         {
+            services.AddLogging();
             services.AddScoped(typeof(IHttpContextAccessor), typeof(HttpContextAccessor));
             services.AddScoped(typeof(IMemoryCache), typeof(MemoryCache));
             return services;
@@ -172,7 +172,7 @@ namespace Core.Extension
         public static IServiceCollection InjectServices(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            //services.InjectCoreServices();
+            services.InjectCoreServices();
             services.InjectNotGenerics();
             services.InjectMiddlewares();
             //services.InjectBusinessServices();
