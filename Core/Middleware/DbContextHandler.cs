@@ -1,6 +1,4 @@
-﻿using Autofac;
-using Core.IoC;
-using Infrastructure.Concrete;
+﻿using Infrastructure.Concrete;
 using Microsoft.AspNetCore.Http;
 
 namespace Core.Middleware
@@ -14,8 +12,6 @@ namespace Core.Middleware
         }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            Provider.LifetimeScope = (ILifetimeScope)context.RequestServices.GetService(typeof(ILifetimeScope));
-
             await next(context);
 
             if (dbContext.Database.CurrentTransaction != null)

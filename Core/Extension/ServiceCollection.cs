@@ -88,7 +88,6 @@ namespace Core.Extension
                 optionsBuilder
                     .UseLoggerFactory(LoggerFactory)
                     .UseNpgsql(connectionString, o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery))
-                    .UseMemoryCache(Provider.Resolve<IMemoryCache>())
                     .EnableSensitiveDataLogging(configuration.GetValue<bool>("Context:EnableSensitiveDataLogging"))
                     .EnableServiceProviderCaching(configuration.GetValue<bool>("Context:EnableServiceProviderCaching"));
             });

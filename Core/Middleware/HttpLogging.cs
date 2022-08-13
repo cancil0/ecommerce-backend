@@ -1,4 +1,6 @@
-﻿using Core.Abstract;
+﻿using Autofac;
+using Core.Abstract;
+using Core.IoC;
 using Microsoft.AspNetCore.Http;
 
 namespace Core.Middleware
@@ -12,6 +14,7 @@ namespace Core.Middleware
         }
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
+            Provider.LifetimeScope = (ILifetimeScope)context.RequestServices.GetService(typeof(ILifetimeScope));
             string correlationId = Guid.NewGuid().ToString();
             context.Items.Add("CorrelationId", correlationId);
             NLog.ScopeContext.PushProperty("CorrelationId", correlationId);

@@ -8,7 +8,6 @@ using Entities.Concrete;
 using Entities.Dto.RequestDto.LoginRequestDto;
 using Entities.Dto.RequestDto.UserRequestDto;
 using Entities.Enums;
-using Infrastructure.Concrete;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +19,7 @@ namespace Business.Concrete
         private readonly IUserDal userDal;
         private readonly ITokenService tokenService;
 
-        public LoginService(IUserDal userDal, ITokenService tokenService, Context context2)
+        public LoginService(IUserDal userDal, ITokenService tokenService)
         {
             this.userDal = userDal;
             this.tokenService = tokenService;

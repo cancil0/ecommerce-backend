@@ -2,7 +2,6 @@
 using Core.Attributes;
 using Core.Extension;
 using Infrastructure.Concrete;
-using LinqKit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -26,7 +25,7 @@ namespace Business.DependencyResolver.Interceptors
             var unitOfWork = invocation.MethodInvocationTarget.GetCustomAttribute<UnitofWorkAttribute>(false);
             IDbContextTransaction transaction = null;
 
-            if (unitOfWork != null)
+            if (unitOfWork != null && unitOfWork.IsTransactional)
             {
                 if (dbContext.Database.CurrentTransaction == null)
                 {
@@ -76,14 +75,16 @@ namespace Business.DependencyResolver.Interceptors
                 }
                 catch (DbUpdateException exception)
                 {
-                    dbContext.Database.RollbackTransaction();
-                    dbContext.Database.CurrentTransaction.Dispose();
-                    dbContext.ChangeTracker.Entries().ForEach(x => x.State = EntityState.Unchanged);
+                    if (unitOfWork.IsTransactional)
+                    {
+                        dbContext.Database.RollbackTransaction();
+                        dbContext.Database.CurrentTransaction.Dispose();
+                    }
+                    dbContext.ChangeTracker.Clear();
                     throw exception;
                 }
 
-
-                if (unitOfWork.CommitInstantly)
+                if (unitOfWork.IsTransactional)
                 {
                     transaction.Commit();
                 }
