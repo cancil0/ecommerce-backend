@@ -1,4 +1,5 @@
 ﻿using Entities.Abstract;
+using Entities.EntityAttributes;
 
 namespace Entities.Concrete
 {
@@ -10,6 +11,8 @@ namespace Entities.Concrete
         public string Province { get; set; }
         public string District { get; set; }
         public string AddressInfo { get; set; }
+
+        [NotLoggableProperty]
         public string MobileNo { get; set; }
         public bool IsDefault { get; set; }
 

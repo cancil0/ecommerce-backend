@@ -1,6 +1,6 @@
 ﻿namespace Entities.EntityAttributes
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property,AllowMultiple = true)]
     public class NotLoggablePropertyAttribute : Attribute
     {
     }

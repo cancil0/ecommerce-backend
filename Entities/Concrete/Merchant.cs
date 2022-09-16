@@ -1,4 +1,5 @@
 ﻿using Entities.Abstract;
+using Entities.EntityAttributes;
 
 namespace Entities.Concrete
 {
@@ -8,6 +9,8 @@ namespace Entities.Concrete
         public string MerchantName { get; set; }
         public decimal MerchantPoint { get; set; }
         public long FeedbackCount { get; set; }
+
+        [NotLoggableProperty]
         public long RegistrationNo { get; set; }
 
         public Address Address { get; set; }

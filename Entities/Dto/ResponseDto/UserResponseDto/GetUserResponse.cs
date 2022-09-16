@@ -26,6 +26,7 @@ namespace Entities.Dto.ResponseDto.UserResponseDto
 
         public string Email { get; set; }
 
+        [NotLoggableProperty]
         public string MobileNo { get; set; }
 
         public string Gender { get; set; }

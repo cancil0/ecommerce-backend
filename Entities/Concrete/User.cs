@@ -28,6 +28,7 @@ namespace Entities.Concrete
 
         public string Email { get; set; }
 
+        [NotLoggableProperty]
         public string MobileNo { get; set; }
 
         public string Gender { get; set; }

@@ -79,13 +79,37 @@ namespace Core.Concrete
             {
                 return response;
             }
-            var res = new JObject();
+            
+            return Hide(properties, jToken);
+        }
 
+        private static string Hide(PropertyInfo[] properties, JToken jToken)
+        {
+            var typeList = new List<Type>()
+            {
+                typeof(string),
+                typeof(int),
+                typeof(long),
+                typeof(short),
+                typeof(decimal),
+                typeof(bool),
+                typeof(DateTime),
+                typeof(Guid)
+            };
+            var res = new JObject();
+            bool isProperyClass;
             foreach (var property in properties)
             {
-                if (property.GetCustomAttribute<NotLoggablePropertyAttribute>() != null)
+                isProperyClass =  typeList.Any(x => x.Name == property.PropertyType.Name);
+
+                if (property.GetCustomAttribute<NotLoggablePropertyAttribute>() != null && isProperyClass)
                 {
                     res.Add(property.Name, "******");
+                }
+                else if (!isProperyClass)
+                {
+                    var items = property.PropertyType.GetProperties();
+                    res.Add(Hide(items, jToken[property.Name]), jToken[property.Name]);
                 }
                 else
                 {
@@ -93,6 +117,6 @@ namespace Core.Concrete
                 }
             }
             return res.ToString(Formatting.None);
-        } 
+        }
     }
 }
